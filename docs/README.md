@@ -6,5 +6,5 @@
 ## Diagrams & Graphics
 
 
-1.
+1. [Architecture view](./architecture.drawio.svg)
 
