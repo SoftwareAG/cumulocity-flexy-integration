@@ -6,7 +6,7 @@ RUN pip3 install wheel \
     && pip3 install -r /tmp/requirements.txt
 
 # Copy already built app
-COPY build/lib/cumulocity_flexy_integration /app/cumulocity_flexy_integration
+COPY build/lib/ewon_flexy_integration /app/ewon_flexy_integration
 
 # Copy gunicorn server/config
 COPY server.py config.py /app/

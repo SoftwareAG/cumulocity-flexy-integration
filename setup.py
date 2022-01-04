@@ -7,7 +7,7 @@ with open("requirements/requirements.txt", "r") as fh:
 
 
 setuptools.setup(
-    name='cumulocity_flexy_integration',
+    name='ewon_flexy_integration',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     long_description=__doc__,

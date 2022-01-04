@@ -10,7 +10,7 @@ import zipfile
 from dotenv import load_dotenv
 from invoke import task
 
-NAME = 'cumulocity_flexy_integration'
+NAME = 'ewon-talk2m-integration'
 MODULE_NAME = NAME.replace('-', '_')
 DOT_ENV = '.env'
 root_dir = './'
@@ -131,7 +131,7 @@ def _get_version():
     Get the version of the microservice from the built python microservice
     """
     return subprocess.check_output(
-        ['python', '-c', 'import cumulocity_flexy_integration; print(cumulocity_flexy_integration.__version__);'],
+        ['python', '-c', 'import ewon_flexy_integration; print(ewon_flexy_integration.__version__);'],
         cwd='build/lib', universal_newlines=True).strip()
 
 

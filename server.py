@@ -4,7 +4,7 @@ import logging
 
 from flask.logging import default_handler
 
-from cumulocity_flexy_integration.main import create_app
+from ewon_flexy_integration.main import create_app
 
 app = create_app()
 gunicorn_logger = logging.getLogger('gunicorn.error')

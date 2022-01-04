@@ -3,7 +3,7 @@ import logging
 
 from werkzeug.exceptions import HTTPException
 from flask import Blueprint, jsonify, request
-from cumulocity_flexy_integration.core import logger
+from ewon_flexy_integration.core import logger
 
 bp = Blueprint('logger', __name__)
 

@@ -1,4 +1,4 @@
 * text=auto eol=lf
 *.{cmd,[cC][mM][dD]} text eol=crlf
 *.{bat,[bB][aA][tT]} text eol=crlf
-./cumulocity_flexy_integration/_version.py export-subst
+./ewon_flexy_integration/_version.py export-subst

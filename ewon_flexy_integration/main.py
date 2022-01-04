@@ -6,11 +6,11 @@ from flask import Flask
 from werkzeug.exceptions import HTTPException
 from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMetrics
 
-import cumulocity_flexy_integration
-from cumulocity_flexy_integration.blueprints import version
-from cumulocity_flexy_integration.blueprints import health
-from cumulocity_flexy_integration.blueprints import datamailbox
-from cumulocity_flexy_integration.blueprints import loglevel
+import ewon_flexy_integration
+from ewon_flexy_integration.blueprints import version
+from ewon_flexy_integration.blueprints import health
+from ewon_flexy_integration.blueprints import datamailbox
+from ewon_flexy_integration.blueprints import loglevel
 
 
 metrics = GunicornInternalPrometheusMetrics.for_app_factory()
@@ -32,7 +32,7 @@ def create_app(config_filename=None) -> Flask:
     # static information as metric
     try:
         metrics.info('app_info', 'Application info',
-                     version=cumulocity_flexy_integration.__version__)
+                     version=ewon_flexy_integration.__version__)
     except ValueError:
         # NOTE: ignore Value error as metrics can only be registered once
         # otherwise a duplicate exception is raised. If a better way is
