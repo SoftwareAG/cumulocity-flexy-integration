@@ -33,9 +33,11 @@ def getewons():
     """Get list of EWON devices
     """
     logger.info("Request for ewon list...")
+    logger.debug("request args = %s" % request.args)
 
-    token = request.args.get('token')
-    dev_id = request.args.get('devid')
+    token = request.args.get('t2mtoken')
+    dev_id = request.args.get('t2mdevid')
+    logger.debug("request args token and devid = %s \t %s" % (token, dev_id))
 
     dm = DataMailboxHandler(token, dev_id)
     try:
@@ -54,12 +56,12 @@ class DataMailboxHandler:
         self.BASE_URL = 'https://data.talk2m.com'
 
     def get_ewons(self)->any:
-        print('get list of ewons...' )
+        print('Get list of ewons...' )
         url_service = '/getewons'
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         data = {"t2mdevid": self.dev_id, "t2mtoken": self.token}
-        logger.info("Send POST request to datamailbox: %s \t %s \t %s" % (self.BASE_URL + url_service, data, headers))
+        logger.debug("Send POST request to datamailbox: %s \t %s \t %s" % (self.BASE_URL + url_service, data, headers))
         r = requests.post(self.BASE_URL + url_service, data = data, headers = headers)
         
         json_body = r.text.splitlines()[-1]  
