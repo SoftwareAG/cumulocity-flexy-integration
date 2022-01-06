@@ -28,3 +28,22 @@
 |`ewonServices.description`|`talk2m.ewonServices.description"`| ewonServices Description|
 |`ewonServices.port`|`talk2m.ewonServices.port"`| ewonServices Port|
 |`ewonServices.protocol`|`talk2m.ewonServices.protocol"`| ewonServices Protocol |
+
+# Mappings for Measurements
+
+|Data Field DataMailbox| Cumulocity fragment in device|Display Name|
+| ---------- | ---------- |---------- |
+|`id`|``|``|
+|`name`|``|``|
+|`tags.id`|``|``|
+|`tags.name`|``|``|
+|`tags.dataType`|``|``|
+|`tags.description`|``|``|
+|`tags.alarmHint`|``|``|
+|`tags.value`|``|``|
+|`tags.quality`|``|``|
+|`tags.ewonTagId`|``|``|
+|`tags.history.value`|``|``|
+|`tags.history.quality`|``|``|
+|`tags.history.ewonTagId`|``|``|
+|`tags.history.history`|``|``|

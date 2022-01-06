@@ -1,0 +1,358 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1005px" height="1002px" viewBox="-0.5 -0.5 1005 1002" content="&lt;mxfile&gt;&lt;diagram id=&quot;TzhqnpBEGA6DEv2K5WRY&quot; name=&quot;Page-1&quot;&gt;7VrZbts4FP0aAzMPDqzNlh69JG2BNBPUBYp5GtASLROhRA1FeZmvn0uL2uXETRPZjR0kjnS4XPKce0XKlz1jGmw/cRStvjIP054+8LY9Y9bTddsx4VMCuxTQbF1LEZ8TT2EFMCf/YQUOFJoQD8eVioIxKkhUBV0WhtgVFQxxzjbVaktGq1Yj5OMGMHcRbaI/iCdWal76qMA/Y+KvMsva0ElLApRVVjOJV8hjmxJk3PaMKWdMpFfBdoqpJC/jJW13d6A0HxjHoTimgZ42WCOaqLndcRYKHHpqfGKXTRqGGsnLJKD3ZIkpCeFuEmFOAiwwhxKq4McCm2xWROB5hFzZdAPuANhKBBTuNLgEhQSCJjy/pxRFMVnsrQ4A4dhNeEzW+BuOU0eQKEuEtDTNBZZgc/KKjzXmAm9LkCLjE2YwTr6DKlmppYRRrqmb6n5T6KwNFLYqaWwNFYiUb/l53wX9cKEUaFfDaKhxrAqIC+KSCO0nDmVjVzB+Onkk4QTiZUyJHwImmOw4Bjsk9L/Lm5kxfEcZzZdV1N9LRLMh4tT+G4Ap4/gyg8oYnDKorIYeAtEnPbhMLXJKT6LFsKHFHK2xDA6OPZgUQTRu6AKL0Vgu2nDHIgyPkwkgalOgwVQnHopX2FMEl7g/SFfMEu7iyjNXIO5jUVkUsVfZBRyktD+40RzHqtCqtbCaEcgxRQL0rm5LWlhVFh8ZgfEX0WRUFTTtmjDp7FSr8tpf68h0Xugo5aTREYiBdqVqkawQHx6wVnM5o7ongYu0x1rrrHu2XMZY9OpelutwlONpWaDUn8qzyWU+B8wjlsj3ew5ozUWypw+pkMFM1hU5hv8mcjMsCZM7mrEMIH/xBwwCrAyyf3/uWRkskPvkc5aEXr9WX7estGrpwlStlqBNf4kCQndpAxArZhQmuK8IY0CBlDMfScIJCKkPQrypF6ZNAhayOPWF3MBGkSgNhIwHiJYKU8VlkWZG27RA6t5flVppjioa5saGvvpfcFeFYBThS3z25Aotf1p6HuU9gaZpZ1UDALeYfYeRyNL899khHWkJGZqlWa1sKgS5oHUovuElhlADNct132AEB+eqKryJDdPS0LOzxD/+evgnhpfbuLP5ySC5dK96QMEHdagZDtjVlbpwJZcF0NXuY7rR7YbJjvrw9/nrHD6/hF4SCw4vCXDzgMWG8Sd4Zg3mN+Obq7914m/APwvGAkRYJKLDBSOtYJ3nZqR7He7HD/LdBa+Je121u6d/SkR3z9wr6xnrctfEjyf+JLxYs3MVrBuRIsbodVmo/57pW/Rp45l4HfvJ29hwbNtCTRs67Gdt57oWdO9H4Yd9kb4n++TIT71Pn9wDRrNzHOGlr8vqS6fvu+iDxsojv37n1IknxYkLL51d7/He1YsET/CrFK2jtUyiwFuJv5AafINs3khOr5TN6+tZ6q6UzsvyrpV0npllqn8pnWc30nlfwligfaWxj1X+uExNaf71w0ILJgQLpKoCcZGn/tf7hNkeuyM0a1w6HLCgzH3KqqjzAfZz/NYS/LVDAFY74yVC3yihP9Sq4uU6/WxC3xo5N45jWyPN1OWn9Xy3B9L7r8iut5yxSb+bOij/75Jjb4RgiyMdjMqhXRW22xx7y2GbswvKRgS2RGk5KM2uYnKky1AqfuxqKFmvjFDbdG6s57t6dVT25NFduawV1YvT18bt/w==&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <rect x="113" y="440" width="100" height="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 163 480 L 163 1000" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 460px; margin-left: 114px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Frontend
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="163" y="464" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Frontend
+                </text>
+            </switch>
+        </g>
+        <ellipse cx="13" cy="445" rx="5" ry="5" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 13 450 L 13 466.67 M 13 453.33 L 3 453.33 M 13 453.33 L 23 453.33 M 13 466.67 L 3 480 M 13 466.67 L 23 480" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 13 480 L 13 1000" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="all"/>
+        <rect x="263" y="440" width="100" height="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 313 480 L 313 1000" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 460px; margin-left: 264px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                C8Y Core
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="313" y="464" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    C8Y Core
+                </text>
+            </switch>
+        </g>
+        <rect x="523" y="440" width="100" height="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 573 480 L 573 1000" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 460px; margin-left: 524px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                talk2m
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="573" y="464" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    talk2m
+                </text>
+            </switch>
+        </g>
+        <path d="M 12.81 520 L 113 520 Q 123 520 133 520 L 160.26 520" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <path d="M 148.38 526.5 L 161.38 520 L 148.38 513.5" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 510px; margin-left: 73px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; background-color: #ffffff; white-space: nowrap; ">
+                                Save Credentials
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="73" y="513" fill="#000000" font-family="Helvetica" font-size="11px" text-anchor="middle">
+                    Save Credentials
+                </text>
+            </switch>
+        </g>
+        <rect x="403" y="440" width="100" height="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 453 480 L 453 1000" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 460px; margin-left: 404px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                C8Y DB
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="453" y="464" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    C8Y DB
+                </text>
+            </switch>
+        </g>
+        <rect x="683" y="0" width="320" height="410" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 7px; margin-left: 685px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: left; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                <div style="color: rgb(0 , 0 , 0) ; background-color: rgb(255 , 255 , 254) ; font-family: &quot;consolas&quot; , &quot;courier new&quot; , monospace ; font-weight: normal ; font-size: 14px ; line-height: 19px">
+                                    <div>
+                                        <span style="color: #000000">
+                                            {
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "accountReference"
+                                        </span>
+                                        <span style="color: #000000">
+                                            :
+                                        </span>
+                                        <span style="color: #0451a5">
+                                            "eWON_sales"
+                                        </span>
+                                        <span style="color: #000000">
+                                            ,
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "accountName"
+                                        </span>
+                                        <span style="color: #000000">
+                                            :
+                                        </span>
+                                        <span style="color: #0451a5">
+                                            "Demo"
+                                        </span>
+                                        <span style="color: #000000">
+                                            ,
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "company"
+                                        </span>
+                                        <span style="color: #000000">
+                                            :
+                                        </span>
+                                        <span style="color: #0451a5">
+                                            "Ewon - HMS Industrial Networks S.A."
+                                        </span>
+                                        <span style="color: #000000">
+                                            ,
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "customAttributes"
+                                        </span>
+                                        <span style="color: #000000">
+                                            : [
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "LAN Devices"
+                                        </span>
+                                        <span style="color: #000000">
+                                            ,
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "City"
+                                        </span>
+                                        <span style="color: #000000">
+                                            ,
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "Country"
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                            ],
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "pools"
+                                        </span>
+                                        <span style="color: #000000">
+                                            : [
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                            {
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "id"
+                                        </span>
+                                        <span style="color: #000000">
+                                            :
+                                        </span>
+                                        <span style="color: #09885a">
+                                            245189
+                                        </span>
+                                        <span style="color: #000000">
+                                            ,
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "name"
+                                        </span>
+                                        <span style="color: #000000">
+                                            :
+                                        </span>
+                                        <span style="color: #0451a5">
+                                            "Live Demo"
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                            }
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                            ],
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "accountType"
+                                        </span>
+                                        <span style="color: #000000">
+                                            :
+                                        </span>
+                                        <span style="color: #0451a5">
+                                            "Pro"
+                                        </span>
+                                        <span style="color: #000000">
+                                            ,
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span style="color: #000000">
+                                        </span>
+                                        <span style="color: #a31515">
+                                            "success"
+                                        </span>
+                                        <span style="color: #000000">
+                                            :
+                                        </span>
+                                        <span style="color: #0451a5">
+                                            true
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="685" y="19" fill="#000000" font-family="Helvetica" font-size="12px">
+                    {...
+                </text>
+            </switch>
+        </g>
+        <path d="M 577 520 L 684.38 520" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <ellipse cx="573" cy="520" rx="4" ry="4" fill="#000000" stroke="#000000" pointer-events="all"/>
+        <path d="M 691.38 520 L 684.38 523.5 L 684.38 516.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-end; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 517px; margin-left: 633px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; background-color: #ffffff; white-space: nowrap; ">
+                                Install Agent
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="633" y="517" fill="#000000" font-family="Helvetica" font-size="11px" text-anchor="middle">
+                    Install Age...
+                </text>
+            </switch>
+        </g>
+        <rect x="643" y="440" width="100" height="40" fill="#ffffff" stroke="#000000" pointer-events="all"/>
+        <path d="M 693 480 L 693 1000" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 460px; margin-left: 644px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; white-space: normal; word-wrap: normal; ">
+                                Device Agent
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="693" y="464" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Device Agent
+                </text>
+            </switch>
+        </g>
+        <path d="M 689 550 L 320.93 550" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke"/>
+        <ellipse cx="693" cy="550" rx="4" ry="4" fill="#000000" stroke="#000000" pointer-events="all"/>
+        <path d="M 313.93 550 L 320.93 546.5 L 320.93 553.5 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-end; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 547px; margin-left: 503px;">
+                        <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                            <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: #000000; line-height: 1.2; pointer-events: all; background-color: #ffffff; white-space: nowrap; ">
+                                Install Agent
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="503" y="547" fill="#000000" font-family="Helvetica" font-size="11px" text-anchor="middle">
+                    Install Age...
+                </text>
+            </switch>
+        </g>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Viewer does not support full SVG 1.1
+            </text>
+        </a>
+    </switch>
+</svg>
