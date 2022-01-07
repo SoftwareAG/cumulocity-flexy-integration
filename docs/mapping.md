@@ -12,6 +12,17 @@
 |`accountType`|`"key": "talk2m.accountType"`|
 |`success`|`"key": "talk2m.success"`|
 
+# Implementation Mapping Account
+
+| key                                    | value 
+----------------------------|-------------
+ `talk2m.accountReference` |  `"eWON_sales"` 
+​`talk2m.accountType`         | `"Pro"` 
+ `talk2m.company`              | `"Ewon - HMS Industrial Networks S.A."` 
+`talk2m.customAttributes`  | `"[LAN Devices,City,Country]"` 
+​`talk2m.pools`                    | `"[{id:245189,name:Live Demo}]"` 
+ `talk2m.success`                 | `"true"` 
+
 # Mappings for devices
 |Data Field talk2M| Cumulocity fragment in device|Display Name|
 | ---------- | ---------- |---------- |
@@ -28,6 +39,52 @@
 |`ewonServices.description`|`talk2m.ewonServices.description"`| ewonServices Description|
 |`ewonServices.port`|`talk2m.ewonServices.port"`| ewonServices Port|
 |`ewonServices.protocol`|`talk2m.ewonServices.protocol"`| ewonServices Protocol |
+
+
+# Implementation Mapping Device
+```json
+"talk2m": {
+        "encodedName": "Machine+11",
+        "lanDevices": [
+            {
+                "protocol": "http",
+                "port": 80,
+                "ip": "192.168.140.9",
+                "name": "2. Camera",
+                "description": ""
+            },
+            {
+                "protocol": "http",
+                "port": 80,
+                "ip": "192.168.140.105",
+                "name": "1. Click here for Demo Overview",
+                "description": ""
+            }
+        ],
+        "description": "Siemens Machine #2",
+        "m2webServer": "eu1.m2web.talk2m.com",
+        "ewonServices": [
+            {
+                "protocol": "http",
+                "port": 81,
+                "name": "Secondary HTTP Server",
+                "description": "Secondary eWON Web Interface"
+            },
+            {
+                "protocol": "http",
+                "port": 80,
+                "name": "HTTP Server",
+                "description": "eWON Web Interface"
+            }
+        ],
+        "customAttributes": [
+            "Siemens S7-300 CPU312C PLC, IP Camera",
+            "Charleroi",
+            "Belgium"
+        ]
+    }
+```
+
 
 # Mappings for Measurements
 
