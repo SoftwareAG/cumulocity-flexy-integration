@@ -90,17 +90,15 @@
 
 |Data Field DataMailbox| Cumulocity fragment in device|Display Name|
 | ---------- | ---------- |---------- |
-|`id`|``|``|
-|`name`|``|``|
-|`tags.id`|``|``|
-|`tags.name`|``|``|
-|`tags.dataType`|``|``|
-|`tags.description`|``|``|
-|`tags.alarmHint`|``|``|
-|`tags.value`|``|``|
-|`tags.quality`|``|``|
-|`tags.ewonTagId`|``|``|
-|`tags.history.value`|``|``|
-|`tags.history.quality`|``|``|
-|`tags.history.ewonTagId`|``|``|
-|`tags.history.history`|``|``|
+|`id`|`externalId`|`EWON id`|
+|`name`|`name`|`device name`|
+|`tags.id`|`talk2m.tagId`|`Tag id`|
+|`tags.name`|`measurementType`|`Measurement Type`|
+|`tags.dataType`|`talk2m.dataType`|`Tag data type`|
+|`tags.description`|`talk2m.description`|`Description`|
+|`tags.alarmHint`|`needs to be mapped as an alarm`|`-----`|
+|`tags.value`|`----`|`----`|
+|`tags.quality`|`talk2m.quality`|`Quality`|
+|`tags.ewonTagId`|`talk2m.ewonTagId`|`EWON Tag Id`|
+|`tags.history.value`|`measurements.type.series.value`|`Value`|
+|`tags.history.quality`|`TBD`|`TBD`|
