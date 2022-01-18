@@ -94,7 +94,7 @@
 |`name`|`name`|`device name`|
 |`tags.id`|`talk2m.tagId`|`Tag id`|
 |`tags.name`|`measurementfragment`|`Measurement Fragment`|
-|`"tags.name": "childdevice/fragment/series"`|`measurementfragment`|`Measurement Fragment`|
+|`"tags.name": "childdevice/fragment/series"`|`measurementfragment`|`"childdevice/fragment/series"`|
 |`tags.name`|`measurementfragment`|`Measurement Fragment`|
 |`tags.dataType`|`talk2m.dataType`|`Tag data type`|
 |`tags.description`|`talk2m.description`|`Description`|
