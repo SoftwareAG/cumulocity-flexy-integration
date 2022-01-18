@@ -88,19 +88,20 @@
 
 # Mappings for Measurements
 
-|Data Field DataMailbox| Cumulocity fragment in device|Display Name|
-| ---------- | ---------- |---------- |
-|`id`|`externalId`|`EWON id`|
-|`name`|`name`|`device name`|
-|`tags.id`|`talk2m.tagId`|`Tag id`|
-|`tags.name`|`measurementfragment`|`Measurement Fragment`|
-|`"tags.name": "childdevice/fragment/series"`|`measurementfragment`|`"childdevice/fragment/series"`|
-|`tags.name`|`measurementfragment`|`Measurement Fragment`|
-|`tags.dataType`|`talk2m.dataType`|`Tag data type`|
-|`tags.description`|`talk2m.description`|`Description`|
-|`tags.alarmHint`|`needs to be mapped as an alarm`|`-----`|
-|`tags.value`|`----`|`----`|
-|`tags.quality`|`talk2m.quality`|`Quality`|
-|`tags.ewonTagId`|`talk2m.ewonTagId`|`EWON Tag Id`|
-|`tags.history.value`|`measurementfragment.series.value`|`Value`|
-|`tags.history.quality`|`TBD`|`TBD`|
+|Data Field DataMailbox| Cumulocity fragment in device|Display Name| Decision|
+| ---------- | ---------- |---------- | ----- |
+|`id`|`externalId`|`EWON id`|ok |
+|`name`|`name`|`device name`| ok |
+|`tags.id`|`talk2m.tagId`|`Tag id`| not needed |
+|`tags.name`|`measurementfragment`|`Measurement Fragment`| ok |
+|`"tags.name": "childdevice/fragment/series"`|`measurementfragment`|`"childdevice/fragment/series"`| ok |
+|`tags.name`|`measurementfragment`|`Measurement Fragment`| ok |
+|`tags.dataType`|`talk2m.dataType`|`Tag data type`| If bool: Measurement with 0,1; If float: Measurement; Int/uint: Measurement; If String: Event  |
+|`tags.description`|`talk2m.description`|`Description`| not needed |
+|`tags.alarmHint`|`needs to be mapped as an alarm`|`-----`| to be clarified if feasable |
+|`tags.value`|`----`|`----`| not needed |
+|`tags.quality`|`talk2m.quality`|`Quality`| not needed |
+|`tags.ewonTagId`|`talk2m.ewonTagId`|`EWON Tag Id`| not needed |
+|`tags.history.date`|`measurementfragment.series.time`|`time`| ok |
+|`tags.history.value`|`measurementfragment.series.value`|`value`| ok  |
+|`tags.history.quality`|`TBD`|`TBD`| not needed |
