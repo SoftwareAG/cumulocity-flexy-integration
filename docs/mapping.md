@@ -93,7 +93,7 @@
 |`id`|`externalId`|`EWON id`|
 |`name`|`name`|`device name`|
 |`tags.id`|`talk2m.tagId`|`Tag id`|
-|`tags.name`|`measurementType`|`Measurement Type`|
+|`tags.name`|`measurementfragment`|`Measurement Fragment`|
 |`tags.dataType`|`talk2m.dataType`|`Tag data type`|
 |`tags.description`|`talk2m.description`|`Description`|
 |`tags.alarmHint`|`needs to be mapped as an alarm`|`-----`|
