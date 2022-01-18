@@ -100,5 +100,5 @@
 |`tags.value`|`----`|`----`|
 |`tags.quality`|`talk2m.quality`|`Quality`|
 |`tags.ewonTagId`|`talk2m.ewonTagId`|`EWON Tag Id`|
-|`tags.history.value`|`measurements.type.series.value`|`Value`|
+|`tags.history.value`|`measurementfragment.series.value`|`Value`|
 |`tags.history.quality`|`TBD`|`TBD`|
