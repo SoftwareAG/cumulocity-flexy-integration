@@ -95,6 +95,7 @@
 |`tags.id`|`talk2m.tagId`|`Tag id`| not needed |
 |`tags.name`|`measurementfragment`|`Measurement Fragment`| ok |
 |`"tags.name": "childdevice/fragment/series"`|`measurementfragment`|`"childdevice/fragment/series"`| ok |
+|`"tags.name": "fragment/series"`|`measurementfragment`|`"fragment/series"`| ok |
 |`tags.name`|`measurementfragment`|`Measurement Fragment`| ok |
 |`tags.dataType`|`talk2m.dataType`|`Tag data type`| If bool: Measurement with 0,1; If float: Measurement; Int/uint: Measurement; If String: Event  |
 |`tags.description`|`talk2m.description`|`Description`| not needed |
