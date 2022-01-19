@@ -53,11 +53,37 @@ class C8YEwonFlexyIntegration:
             m = Measurement()
             m.type = 'c8y_Measurement'
             m.source = source
-            m[tag.get("name")] = { tag.get("name").upper()[:1] : {'unit': '', 'value': 0.0 if h.get("value") == False else 1.0 }} \
+            fragment = self.__get_measurement_fragment_by_name(tag.get("name"))
+            series = self.__get_measurement_series_by_name(tag.get("name"))
+            m[fragment] = { series : {'unit': '', 'value': 0.0 if h.get("value") == False else 1.0 }} \
                                     if isBoolean else { tag.get("name").upper()[:1] : {'unit': '', 'value': float(h.get("value")) }}
             m.time = h.get("date")
             measurements.append( m )
         # Send history measurements
         self.c8y.measurements.create(*measurements)
+
+    def __get_measurement_fragment_by_name(self, name:str) -> str:
+
+        if '/' in name:
+            if name.count('/') == 1:
+                split:list = name.split('/')
+                return split[0] # One/2 = Fragment: One
+            elif name.count('/') >= 2:
+                split:list = name.split('/')
+                return split[len(split) - 2] # One/Two/3 = Fragment: Two
+        else:
+            return name # One = Fragment: One
+
+    def __get_measurement_series_by_name(self, name:str) -> str:
+
+        if '/' in name:
+            if name.count('/') == 1:
+                split:list = name.split('/')
+                return split[1] # One/2 = Fragment: One
+            elif name.count('/') >= 2:
+                split:list = name.split('/')
+                return split[len(split) - 1] # One/Two/3 = Fragment: Two
+        else:
+            return str(0)
         
     
