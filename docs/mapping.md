@@ -97,7 +97,7 @@
 |`"tags.name": "childdevice/fragment/series"`|`measurementfragment`|`"childdevice/fragment/series"`| ok |
 |`"tags.name": "fragment/series"`|`measurementfragment`|`"fragment/series"`| ok |
 |`tags.name`|`measurementfragment`|`Measurement Fragment`| ok |
-|`tags.dataType`|`talk2m.dataType`|`Tag data type`| If bool: Measurement with 0,1; If float: Measurement; Int/uint: Measurement; If String: Event  |
+|`tags.dataType`|`talk2m.dataType`|`Tag data type`| boolean: Measurement with 0,1; float: Measurement; Int/uint: Measurement; String: Event  |
 |`tags.description`|`talk2m.description`|`Description`| not needed |
 |`tags.alarmHint`|`needs to be mapped as an alarm`|`-----`| to be clarified if feasable |
 |`tags.value`|`----`|`----`| not needed |
