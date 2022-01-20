@@ -106,3 +106,16 @@
 |`tags.history.date`|`measurementfragment.series.time`|`time`| ok |
 |`tags.history.value`|`measurementfragment.series.value`|`value`| ok  |
 |`tags.history.quality`|`TBD`|`TBD`| not needed |
+|`tags.alarmHistory.date`||`time`|	ok |
+|`tags.alarmHistory.status`||`ALM, RTN, ACK, END`|	TBD |
+|`tags.alarmHistory.type`||`Type string „Low“, „High“, …`|	Will be used in mapping  |
+
+# Mappings for Alarms
+
+|Data Field | Alarm value in Flexy |Cumulocity Alarm Type|Cumulocity Alarm Severity|
+| ---------- | ---------- |---------- | ----- |
+|`tags.alarmHint`|"Critical"||"Critical"|
+|`tags.alarmHint`|"Major"||"Major"|
+|`tags.alarmHint`|"Minor"||"Minor"|
+|`tags.alarmHint`|"Warning"||"Warning"|
+|`tags.alarmHint`|""||"Major"|
