@@ -93,10 +93,10 @@ class C8YEwonFlexyIntegration:
         if '/' in name:
             if name.count('/') == 1:
                 split:list = name.split('/')
-                return split[1] # One/2 = Fragment: One
+                return split[1] # One/2 = Series: 2
             elif name.count('/') >= 2:
                 split:list = name.split('/')
-                return split[len(split) - 1] # One/Two/3 = Fragment: Two
+                return split[len(split) - 1] # One/Two/3 = Fragment: 3
         else:
             return str(0)
         
