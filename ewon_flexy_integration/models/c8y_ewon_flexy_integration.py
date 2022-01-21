@@ -63,7 +63,14 @@ class C8YEwonFlexyIntegration:
         self.c8y.measurements.create(*measurements)
 
     def __get_measurement_fragment_by_name(self, name:str) -> str:
+        """ Get the fragment name based on tag name.
 
+        Args:
+            name (str): Tag name from Data Mailbox.
+
+        Returns:
+            str: Fragment name.
+        """
         if '/' in name:
             if name.count('/') == 1:
                 split:list = name.split('/')
@@ -75,7 +82,14 @@ class C8YEwonFlexyIntegration:
             return name # One = Fragment: One
 
     def __get_measurement_series_by_name(self, name:str) -> str:
+        """ Get the series name based on tag name.
 
+        Args:
+            name (str): Tag name from Data Mailbox.
+
+        Returns:
+            str: Series name.
+        """
         if '/' in name:
             if name.count('/') == 1:
                 split:list = name.split('/')
