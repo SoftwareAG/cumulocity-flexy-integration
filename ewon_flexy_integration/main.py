@@ -7,11 +7,10 @@ from werkzeug.exceptions import HTTPException
 from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMetrics
 
 import ewon_flexy_integration
-from ewon_flexy_integration.blueprints import version
+from ewon_flexy_integration.blueprints import datasynchronization, job_execution_schedule, version
 from ewon_flexy_integration.blueprints import health
 from ewon_flexy_integration.blueprints import datamailbox
 from ewon_flexy_integration.blueprints import loglevel
-
 
 metrics = GunicornInternalPrometheusMetrics.for_app_factory()
 
@@ -52,6 +51,8 @@ def register_blueprints(app: Flask):
     app.register_blueprint(datamailbox.bp, url_prefix='/datamailbox')
     app.register_blueprint(version.bp)
     app.register_blueprint(loglevel.bp)
+    app.register_blueprint(datasynchronization.bp)
+    app.register_blueprint(job_execution_schedule.bp)
 
 
 def handle_exception(e: HTTPException):

@@ -23,8 +23,8 @@ class C8YEwonFlexyIntegration:
         """
         job_mo : ManagedObject = self.c8y.inventory.get(job_id)
 
-        if hasattr(job_mo, 'ewons'):
-            return job_mo.ewons
+        if hasattr(job_mo, 'ewonIds'):
+            return job_mo["ewonIds"]
         else:
             return []
 
@@ -38,7 +38,7 @@ class C8YEwonFlexyIntegration:
             ManagedObject: Ewon gateway device.
 
         """
-        return self.c8y.identity.get_object(C8Y_EXTERNAL_ID_PREFIX + ewon_id + C8Y_EXTERNAL_ID_TYPE)
+        return self.c8y.identity.get_object(C8Y_EXTERNAL_ID_PREFIX + ewon_id, C8Y_EXTERNAL_ID_TYPE)
 
     def create_measurements_history(self, tag: any, source: str, isBoolean: bool) -> None:
         """Create Measurement history tag values

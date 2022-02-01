@@ -49,65 +49,6 @@ def getewons():
         return jsonify(exception)
 
     return jsonify(result)
-
-@bp.route('/syncdata')
-def syncdata():
-    """Get list of data from devices
-    """
-    logger.info("Get data from ewon device...")
-
-    token = request.args.get('t2mtoken')
-    job_id = request.args.get('jobId')
-    tenant_id = request.args.get('tenantId')
-    print("==========================================")
-    print(tenant_id)
-    c8y = CumulocityApp.get_tenant_instance(tenant_id)
-    
-    dm = DataMailboxHandler(token)
-    c8y_ewon_integration = C8YEwonFlexyIntegration(c8y)
-    ewon_ids = c8y_ewon_integration.get_ewons_from_job_id(job_id)
-
-    # Go through list of ewon gateways
-    for ewon_id in ewon_ids:
-        try:
-            dm_history:dict = dm.sync_data(ewon_id)
-        except HTTPException as exception:
-            return jsonify(exception)
-
-        # Go through list of history and sync with c8y
-        for ewon in dm_history["ewons"]:
-            try:
-                ewon_mo:ManagedObject = c8y_ewon_integration.get_ewon_device(str(ewon["id"]))
-            except (KeyError) as error:
-                continue
-
-            # Each tag represents another measurement type
-            tags: list = ewon["tags"]
-            for t in tags:   
-                
-                try:
-                    # Send numbers as measurements
-                    if t.get("dataType") & ( t.get("dataType") == "Float" | t.get("dataType") == "Int"):
-                        print("Start creating measurements...")
-                        c8y_ewon_integration.create_measurements_history(t, ewon_mo.id, False)
-                    # Send booleans as measurement
-                    elif t.get("dataType") & ( t.get("dataType") == "Boolean"):
-                        print("Start creating measurements, convert boolean to 0 and 1...")
-                        c8y_ewon_integration.create_measurements_history(t, ewon_mo.id, True)
-                    # Send strings as events
-                    elif t.get("dataType") & ( t.get("dataType") == "String"):
-                        print("Start creating events...")
-                        logger.info("sending event to be defined.")
-                    # Unknown data type
-                    else:
-                        logger.warn("Unknown data type for tag: %s" , t.get("dataType"))
-                
-                except (ValueError, TypeError, SyntaxError, KeyError) as error:
-                    logger.error("failed post history to cumulocity: %s", error)
-                    return Conflict("Failed post history to cumulocity: %s", error)
-
-    return '', 200
-
 class DataMailboxHandler:
     """ Handler for Data Mailbox
     """
