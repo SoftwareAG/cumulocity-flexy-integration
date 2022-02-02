@@ -30,7 +30,7 @@ def execute_job():
     """Manually execute synchronization for specific job via this endpoint.
     """
     ##TODO store token in tenant options
-    token = "53edRmx8AACZNyWiMSPpk9JMWy7YMTjQrjVIZ3as79Uiw444nA"
+    token = request.headers.get('t2mtoken')
     job_id = request.headers.get('jobId')
     tenant_id = request.headers.get('tenantId')
     dsh = DataSynchronizationHandler()
@@ -88,36 +88,35 @@ class DataSynchronizationHandler:
                     continue
 
                 logger.info(
-                    "Synchronizing data for device: {ewon_mo.name} [{ewon_mo.id}]")
+                    f"Synchronizing data for device: {ewon_mo.name} [{ewon_mo.id}]")
                 # Each tag represents another measurement type
                 tags: list = ewon["tags"]
                 for t in tags:
                     try:
-                        # Send numbers as measurements
-                        if t.get("dataType") & (t.get("dataType") == "Float" | t.get("dataType") == "Int"):
-                            logger.info("Start creating measurements...")
-                            c8y_ewon_integration.create_measurements_history(
-                                t, ewon_mo.id, False)
-                        # Send booleans as measurement
-                        elif t.get("dataType") & (t.get("dataType") == "Boolean"):
-                            logger.info(
-                                "Start creating measurements, convert boolean to 0 and 1...")
-                            c8y_ewon_integration.create_measurements_history(
-                                t, ewon_mo.id, True)
-                        # Send strings as events
-                        elif t.get("dataType") & (t.get("dataType") == "String"):
-                            logger.info("Start creating events...")
-                            logger.info("sending event to be defined.")
-                        # Unknown data type
-                        else:
-                            logger.warn(
-                                "Unknown data type for tag: %s", t.get("dataType"))
-
+                        if t.get("dataType"):
+                            # Send numbers as measurements
+                            if t.get("dataType") == 'Int':
+                                logger.info("Start creating measurements...")
+                                c8y_ewon_integration.create_measurements_history(
+                                    t, ewon_mo.id, False)
+                            # Send booleans as measurement
+                            elif t.get("dataType") == "Boolean":
+                                logger.info(
+                                    "Start creating measurements, convert boolean to 0 and 1...")
+                                c8y_ewon_integration.create_measurements_history(
+                                    t, ewon_mo.id, True)
+                            # Send strings as events
+                            elif t.get("dataType") == "String":
+                                logger.info("Start creating events...")
+                                logger.info("sending event to be defined.")
+                            # Unknown data type
+                            else:
+                                logger.warn(
+                                    "Unknown data type for tag: %s", t.get("dataType"))
                     except (ValueError, TypeError, SyntaxError, KeyError) as error:
                         logger.error(
                             "failed post history to cumulocity: %s", error)
-                        return CONFLICT("Failed post history to cumulocity: %s", error)
-
+                        return ("Failed post history to cumulocity: %s", error), CONFLICT
         return '', 200
 
     def get_subscribed_tenants_list(self):

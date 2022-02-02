@@ -10,7 +10,7 @@ import zipfile
 from dotenv import load_dotenv
 from invoke import task
 
-NAME = 'ewon-talk2m-integration'
+NAME = 'ewon-flexy-integration'
 MODULE_NAME = NAME.replace('-', '_')
 DOT_ENV = '.env'
 root_dir = './'

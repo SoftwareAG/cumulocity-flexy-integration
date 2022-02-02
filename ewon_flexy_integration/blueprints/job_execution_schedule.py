@@ -17,7 +17,7 @@ def run_continuously(interval=1):
 
     class ScheduleThread(threading.Thread):
         @classmethod
-        def run(cls):
+        def run(self):
             while not cease_continuous_run.is_set():
                 schedule.run_pending()
                 time.sleep(interval)
