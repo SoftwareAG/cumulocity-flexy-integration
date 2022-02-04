@@ -82,7 +82,7 @@ class DataMailboxHandler:
         
         return json_data
 
-    def sync_data(self, ewon_id: str, **kwargs ) -> dict:
+    def sync_data(self, ewon_id: str, lastTransactionId: int, **kwargs ) -> dict:
         """ This Service retrieves all data of a Talk2M account incrementally. 
             Therefore, only new data is returned on each API request.
 
@@ -105,10 +105,10 @@ class DataMailboxHandler:
             "t2mdevid": self.dev_id, 
             "t2mtoken": self.token, 
             "ewonId": ewon_id,
-            # "createTransaction" : True
+            "createTransaction": True
             }
-        lastTransactionId = kwargs.get('lastTransactionId', None)
-        if lastTransactionId:
+            
+        if lastTransactionId > 0:
             data["lastTransactionId"] = lastTransactionId
 
         logger.debug("Send POST request to datamailbox: %s \t %s \t %s" % (self.base_url + url_service, data, headers))

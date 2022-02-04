@@ -5,7 +5,7 @@ import requests
 from http.client import CONFLICT, HTTPException
 from ewon_flexy_integration.blueprints.datamailbox import DataMailboxHandler
 from ewon_flexy_integration.models.c8y_ewon_flexy_integration import C8YEwonFlexyIntegration
-from c8y_api.model import Measurement, ManagedObject
+from c8y_api.model import ManagedObject
 
 from flask import Blueprint, jsonify, request
 from c8y_api.app import CumulocityApp
@@ -22,7 +22,9 @@ def execute_all_jobs():
     token = "53edRmx8AACZNyWiMSPpk9JMWy7YMTjQrjVIZ3as79Uiw444nA"
     dsh = DataSynchronizationHandler()
     total_jobs_executed = dsh.synchronize_historic_data(token)
-    return "Total jobs executed: " + total_jobs_executed
+    result_message = "Total jobs executed: " + str(total_jobs_executed)
+    logger.info(result_message)
+    return result_message
 
 
 @bp.route('/executejob')
@@ -40,7 +42,7 @@ def execute_job():
 class DataSynchronizationHandler:
 
     def __init__(self):
-        self.c8y = CumulocityApp()
+        self.c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
 
     def synchronize_historic_data(self, token):
         """Synchronize history data according to jobs. 
@@ -66,57 +68,72 @@ class DataSynchronizationHandler:
         """Get list of data from devices
         """
         logger.info(f'Executing Job: {job_id}')
-        c8y = self.c8y.get_tenant_instance(tenant_id)
+        tenant_instance = self.c8y.get_tenant_instance(tenant_id)
 
         dm = DataMailboxHandler(token)
-        c8y_ewon_integration = C8YEwonFlexyIntegration(c8y)
+        c8y_ewon_integration = C8YEwonFlexyIntegration(tenant_instance)
         ewon_ids = c8y_ewon_integration.get_ewons_from_job_id(job_id)
 
         # Go through list of ewon gateways
         for ewon_id in ewon_ids:
             try:
-                dm_history: dict = dm.sync_data(ewon_id)
+                ewon_mo: ManagedObject = c8y_ewon_integration.get_ewon_device(
+                    str(ewon_id))
+            except (KeyError) as error:
+                continue
+
+            last_transaction_id: int
+            try:
+                if hasattr(ewon_mo, 'lastTransactionId'):
+                    last_transaction_id = int(ewon_mo['lastTransactionId'])
+            except:
+                last_transaction_id = 0
+
+            try:
+                dm_history: dict = dm.sync_data(ewon_id, last_transaction_id)
             except HTTPException as exception:
                 return jsonify(exception)
 
-            # Go through list of history and sync with c8y
-            for ewon in dm_history["ewons"]:
-                try:
-                    ewon_mo: ManagedObject = c8y_ewon_integration.get_ewon_device(
-                        str(ewon["id"]))
-                except (KeyError) as error:
-                    continue
-
-                logger.info(
-                    f"Synchronizing data for device: {ewon_mo.name} [{ewon_mo.id}]")
-                # Each tag represents another measurement type
-                tags: list = ewon["tags"]
-                for t in tags:
-                    try:
-                        if t.get("dataType"):
-                            # Send numbers as measurements
-                            if t.get("dataType") == 'Int':
-                                logger.info("Start creating measurements...")
-                                c8y_ewon_integration.create_measurements_history(
-                                    t, ewon_mo.id, False)
-                            # Send booleans as measurement
-                            elif t.get("dataType") == "Boolean":
-                                logger.info(
-                                    "Start creating measurements, convert boolean to 0 and 1...")
-                                c8y_ewon_integration.create_measurements_history(
-                                    t, ewon_mo.id, True)
-                            # Send strings as events
-                            elif t.get("dataType") == "String":
-                                logger.info("Start creating events...")
-                                logger.info("sending event to be defined.")
-                            # Unknown data type
-                            else:
-                                logger.warn(
-                                    "Unknown data type for tag: %s", t.get("dataType"))
-                    except (ValueError, TypeError, SyntaxError, KeyError) as error:
-                        logger.error(
-                            "failed post history to cumulocity: %s", error)
-                        return ("Failed post history to cumulocity: %s", error), CONFLICT
+            if (len(dm_history["ewons"]) > 0):
+                # Go through list of history and sync with c8y
+                for ewon in dm_history["ewons"]:
+                    logger.info(
+                        f"Synchronizing data for device: {ewon_mo.name} [{ewon_mo.id}]")
+                    # Each tag represents another measurement type
+                    tags: list = ewon["tags"]
+                    for t in tags:
+                        try:
+                            if t.get("dataType"):
+                                # Send numbers as measurements
+                                if t.get("dataType") == 'Int':
+                                    logger.info(
+                                        "Start creating measurements...")
+                                    c8y_ewon_integration.create_measurements_history(
+                                        t, ewon_mo.id, False)
+                                # Send booleans as measurement
+                                elif t.get("dataType") == "Boolean":
+                                    logger.info(
+                                        "Start creating measurements, convert boolean to 0 and 1...")
+                                    c8y_ewon_integration.create_measurements_history(
+                                        t, ewon_mo.id, True)
+                                # Send strings as events
+                                elif t.get("dataType") == "String":
+                                    logger.info("Start creating events...")
+                                    logger.info("sending event to be defined.")
+                                # Unknown data type
+                                else:
+                                    logger.warn(
+                                        "Unknown data type for tag: %s", t.get("dataType"))
+                        except (ValueError, TypeError, SyntaxError, KeyError) as error:
+                            logger.error(
+                                "failed post history to cumulocity: %s", error)
+                            return ("Failed post history to cumulocity: %s", error), CONFLICT
+                    # Update lastTransactionId in Ewon Managed Object
+                    last_transaction_id = dm_history['transactionId']
+                    to_update = dict()
+                    to_update["lastTransactionId"] = last_transaction_id
+                    tenant_instance.put(
+                        f'/inventory/managedObjects/{ewon_mo.id}', to_update)
         return '', 200
 
     def get_subscribed_tenants_list(self):
