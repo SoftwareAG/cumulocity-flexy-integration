@@ -1,14 +1,15 @@
 """Scheduler for historic data synchronization"""
 import os
 import logging
+from ewon_flexy_integration.utils.rest import TenantApi
 import requests
-from http.client import CONFLICT, HTTPException
+from http.client import CONFLICT, NOT_FOUND, HTTPException
 from ewon_flexy_integration.blueprints.datamailbox import DataMailboxHandler
 from ewon_flexy_integration.models.c8y_ewon_flexy_integration import C8YEwonFlexyIntegration
 from c8y_api.model import ManagedObject
 
 from flask import Blueprint, jsonify, request
-from c8y_api.app import CumulocityApp
+from c8y_api.app import CumulocityApp, CumulocityApi
 
 bp = Blueprint('datasynchronization', __name__)
 logger = logging.getLogger('data synchronization')
@@ -18,8 +19,12 @@ logger = logging.getLogger('data synchronization')
 def execute_all_jobs():
     """Manually execute synchronization of all jobs via this endpoint.
     """
-    ##TODO store token in tenant options
-    token = "53edRmx8AACZNyWiMSPpk9JMWy7YMTjQrjVIZ3as79Uiw444nA"
+    c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
+    tenant_api = TenantApi(c8y)
+    token = tenant_api.get_tenant_option("hms-integration", "credentials.talk2m.datamailbox.token" )
+    
+    if token is None:
+        return "Datamailbox token is missing in tenant options"
     dsh = DataSynchronizationHandler()
     total_jobs_executed = dsh.synchronize_historic_data(token)
     result_message = "Total jobs executed: " + str(total_jobs_executed)
@@ -31,7 +36,6 @@ def execute_all_jobs():
 def execute_job():
     """Manually execute synchronization for specific job via this endpoint.
     """
-    ##TODO store token in tenant options
     token = request.headers.get('t2mtoken')
     job_id = request.headers.get('jobId')
     tenant_id = request.headers.get('tenantId')

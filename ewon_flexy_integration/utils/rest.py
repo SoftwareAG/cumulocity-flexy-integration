@@ -136,3 +136,13 @@ class TenantApi:
         except Exception as ex:
             logger.error(
                 'could not fetch the system version. exception=%s', ex)
+
+    def get_tenant_option(self, category, key):
+        """Get tenant option value by key and category"""
+        try:
+            uri = f'/tenant/options/{category}/{key}'
+            val = self.c8y.get(uri)
+            return val['value']
+        except Exception as ex:
+            logger.error(
+                'could not fetch the Tenant Option. exception=%s', ex)
