@@ -1,6 +1,7 @@
 """Scheduler for historic data synchronization"""
 import os
 import logging
+import base64
 from ewon_flexy_integration.utils.rest import TenantApi
 import requests
 from http.client import CONFLICT, NOT_FOUND, HTTPException
@@ -19,14 +20,9 @@ logger = logging.getLogger('data synchronization')
 def execute_all_jobs():
     """Manually execute synchronization of all jobs via this endpoint.
     """
-    c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
-    tenant_api = TenantApi(c8y)
-    token = tenant_api.get_tenant_option("hms-integration", "credentials.talk2m.datamailbox.token" )
-    
-    if token is None:
-        return "Datamailbox token is missing in tenant options"
+
     dsh = DataSynchronizationHandler()
-    total_jobs_executed = dsh.synchronize_historic_data(token)
+    total_jobs_executed = dsh.synchronize_historic_data()
     result_message = "Total jobs executed: " + str(total_jobs_executed)
     logger.info(result_message)
     return result_message
@@ -48,7 +44,7 @@ class DataSynchronizationHandler:
     def __init__(self):
         self.c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
 
-    def synchronize_historic_data(self, token):
+    def synchronize_historic_data(self):
         """Synchronize history data according to jobs. 
         """
         subscribed_tenants_list = self.get_subscribed_tenants_list()
@@ -63,10 +59,28 @@ class DataSynchronizationHandler:
                 jobs_executed = []
                 for job_mo in subtenant_jobs_mo_list:
                     if (job_mo["isActive"]):
+                        owner = job_mo["owner"]
+                        category = self.create_tenant_option_category(owner)
+                        token = self.get_token_value_from_tenant_options(category, subtenant_instance)
                         job_id = job_mo["id"]
-                        self.syncdata(token, job_id, subscribed_tenant_id)
-                        jobs_executed.append(job_mo)
+                        if token is None:
+                            logger.warn(f'Datamailbox token is missing in tenant options for user {owner} & job{job_id}')
+                        else:
+                            self.syncdata(token, job_id, subscribed_tenant_id)
         return len(jobs_executed)
+
+    def create_tenant_option_category(self, string_to_encode: str):
+            conversion_bytes = string_to_encode.encode('ascii')
+            base64_bytes = base64.b64encode(conversion_bytes)
+            converted = base64_bytes.decode('ascii')
+            tenant_option_category = 'flexy_' + converted.replace('=','').replace('+','-').replace('/','_')
+            return tenant_option_category
+
+    def get_token_value_from_tenant_options(self, category, subtenant_instance):
+            #c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
+            tenant_api = TenantApi(subtenant_instance)
+            token = tenant_api.get_tenant_option(category, "token" )
+            return token
 
     def syncdata(self, token, job_id, tenant_id):
         """Get list of data from devices
