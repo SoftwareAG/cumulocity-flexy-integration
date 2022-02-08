@@ -26,7 +26,6 @@ def execute_all_jobs():
     logger.info(result_message)
     return result_message
 
-
 @bp.route('/executejob')
 def execute_job():
     """Manually execute synchronization for specific job via this endpoint.
@@ -36,7 +35,6 @@ def execute_job():
     tenant_id = request.headers.get('tenantId')
     dsh = DataSynchronizationHandler()
     return dsh.syncdata(token, job_id, tenant_id)
-
 
 class DataSynchronizationHandler:
 
@@ -127,7 +125,7 @@ class DataSynchronizationHandler:
                                         "Start creating measurements...")
                                     c8y_ewon_integration.create_measurements_history(
                                         t, ewon_mo.id, False)
-                                if t.get("dataType") == 'Float':
+                                elif t.get("dataType") == 'Float':
                                     logger.info(
                                         "Start creating measurements...")
                                     c8y_ewon_integration.create_measurements_history(

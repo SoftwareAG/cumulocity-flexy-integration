@@ -135,18 +135,19 @@ class DataMailboxHandler:
         print('sync data...')
         json_data: dict = None
         more_data_available:bool = True
-        ewon_list = []
+        tags_list = []
         while more_data_available:
             data = self.sync_data(ewon_id, lastTransactionId)
             if json_data is None:
                 json_data = data
             else:
-                if len(data['ewons']) > 0:
-                    ewon_list.extend(data['ewons'])
+                if len(data['ewons']) > 0 & len(data['ewons'][0]['tags']):
+                    tags = data['ewons'][0]['tags']
+                    tags_list.extend(tags)
             more_data_available = data['moreDataAvailable'] if 'moreDataAvailable' in data else False
             lastTransactionId = int(data['transactionId'])
         
-        json_data['ewons'].extend(ewon_list)
+        json_data['ewons'][0]['tags'].extend(tags_list)
         json_data['transactionId'] = lastTransactionId
         json_data['moreDataAvailable'] = more_data_available
 
