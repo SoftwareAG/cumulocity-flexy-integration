@@ -96,8 +96,6 @@ class DataMailboxHandler:
             Returns:
                 Content of the DataMailbox: configuration, tag history and alarm history.
         """
-
-        print('sync data...')
         url_service = '/syncdata'
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -116,6 +114,41 @@ class DataMailboxHandler:
 
         json_body = r.text.splitlines()[-1]  
         json_data = json.loads(json_body)
+
+        return json_data
+
+    def sync_all_history_data(self, ewon_id: str, lastTransactionId: int, **kwargs ) -> dict:
+        """ This Service retrieves all data of a Talk2M account incrementally. 
+                    Therefore, only new data is returned on each API request.
+
+                    Args:
+                        tenant_id (str):  ID of the tenant to get access to
+                        ewon_id (str): A comma separated list of Ewon gateway IDs.
+                        lastTransactionId (str):    ID of the transaction that was returned by the latest <syncdata> request.
+                                                    The system returns all the historical data that has been received by the DataMailbox since
+                                                    the last transaction and a new transaction ID. 
+
+                    Returns:
+                        Content of the DataMailbox: configuration, tag history and alarm history.
+                """
+
+        print('sync data...')
+        json_data: dict = None
+        more_data_available:bool = True
+        ewon_list = []
+        while more_data_available:
+            data = self.sync_data(ewon_id, lastTransactionId)
+            if json_data is None:
+                json_data = data
+            else:
+                if len(data['ewons']) > 0:
+                    ewon_list.extend(data['ewons'])
+            more_data_available = data['moreDataAvailable'] if 'moreDataAvailable' in data else False
+            lastTransactionId = int(data['transactionId'])
+        
+        json_data['ewons'].extend(ewon_list)
+        json_data['transactionId'] = lastTransactionId
+        json_data['moreDataAvailable'] = more_data_available
 
         return json_data
 

@@ -15,7 +15,6 @@ from c8y_api.app import CumulocityApp, CumulocityApi
 bp = Blueprint('datasynchronization', __name__)
 logger = logging.getLogger('data synchronization')
 
-
 @bp.route('/executalljobs')
 def execute_all_jobs():
     """Manually execute synchronization of all jobs via this endpoint.
@@ -108,7 +107,7 @@ class DataSynchronizationHandler:
                 last_transaction_id = 0
 
             try:
-                dm_history: dict = dm.sync_data(ewon_id, last_transaction_id)
+                dm_history: dict = dm.sync_all_history_data(ewon_id, last_transaction_id)
             except HTTPException as exception:
                 return jsonify(exception)
 
@@ -128,8 +127,13 @@ class DataSynchronizationHandler:
                                         "Start creating measurements...")
                                     c8y_ewon_integration.create_measurements_history(
                                         t, ewon_mo.id, False)
+                                if t.get("dataType") == 'Float':
+                                    logger.info(
+                                        "Start creating measurements...")
+                                    c8y_ewon_integration.create_measurements_history(
+                                        t, ewon_mo.id, False)
                                 # Send booleans as measurement
-                                elif t.get("dataType") == "Boolean":
+                                elif t.get("dataType") == "Bool":
                                     logger.info(
                                         "Start creating measurements, convert boolean to 0 and 1...")
                                     c8y_ewon_integration.create_measurements_history(
