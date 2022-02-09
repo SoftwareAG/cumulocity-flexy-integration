@@ -15,6 +15,7 @@ from c8y_api.app import CumulocityApp, CumulocityApi
 bp = Blueprint('datasynchronization', __name__)
 logger = logging.getLogger('data synchronization')
 
+
 @bp.route('/executalljobs')
 def execute_all_jobs():
     """Manually execute synchronization of all jobs via this endpoint.
@@ -26,6 +27,7 @@ def execute_all_jobs():
     logger.info(result_message)
     return result_message
 
+
 @bp.route('/executejob')
 def execute_job():
     """Manually execute synchronization for specific job via this endpoint.
@@ -35,6 +37,7 @@ def execute_job():
     tenant_id = request.headers.get('tenantId')
     dsh = DataSynchronizationHandler()
     return dsh.syncdata(token, job_id, tenant_id)
+
 
 class DataSynchronizationHandler:
 
@@ -58,26 +61,29 @@ class DataSynchronizationHandler:
                     if (job_mo["isActive"]):
                         owner = job_mo["owner"]
                         category = self.create_tenant_option_category(owner)
-                        token = self.get_token_value_from_tenant_options(category, subtenant_instance)
+                        token = self.get_token_value_from_tenant_options(
+                            category, subtenant_instance)
                         job_id = job_mo["id"]
                         if token is None:
-                            logger.warn(f'Datamailbox token is missing in tenant options for user {owner} & job{job_id}')
+                            logger.warn(
+                                f'Datamailbox token is missing in tenant options for user {owner} & job{job_id}')
                         else:
                             self.syncdata(token, job_id, subscribed_tenant_id)
         return len(jobs_executed)
 
     def create_tenant_option_category(self, string_to_encode: str):
-            conversion_bytes = string_to_encode.encode('ascii')
-            base64_bytes = base64.b64encode(conversion_bytes)
-            converted = base64_bytes.decode('ascii')
-            tenant_option_category = 'flexy_' + converted.replace('=','').replace('+','-').replace('/','_')
-            return tenant_option_category
+        conversion_bytes = string_to_encode.encode('ascii')
+        base64_bytes = base64.b64encode(conversion_bytes)
+        converted = base64_bytes.decode('ascii')
+        tenant_option_category = 'flexy_' + \
+            converted.replace('=', '').replace('+', '-').replace('/', '_')
+        return tenant_option_category
 
     def get_token_value_from_tenant_options(self, category, subtenant_instance):
-            #c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
-            tenant_api = TenantApi(subtenant_instance)
-            token = tenant_api.get_tenant_option(category, "token" )
-            return token
+        #c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
+        tenant_api = TenantApi(subtenant_instance)
+        token = tenant_api.get_tenant_option(category, "token")
+        return token
 
     def syncdata(self, token, job_id, tenant_id):
         """Get list of data from devices
@@ -105,7 +111,8 @@ class DataSynchronizationHandler:
                 last_transaction_id = 0
 
             try:
-                dm_history: dict = dm.sync_all_history_data(ewon_id, last_transaction_id)
+                dm_history: dict = dm.sync_all_history_data(
+                    ewon_id, last_transaction_id)
             except HTTPException as exception:
                 return jsonify(exception)
 

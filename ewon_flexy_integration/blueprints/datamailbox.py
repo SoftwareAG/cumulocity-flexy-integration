@@ -117,7 +117,7 @@ class DataMailboxHandler:
 
         return json_data
 
-    def sync_all_history_data(self, ewon_id: str, lastTransactionId: int, **kwargs ) -> dict:
+    def sync_all_history_data(self, ewon_id: str, lastTransactionId: int, **kwargs) -> dict:
         """ This Service retrieves all data of a Talk2M account incrementally. 
                     Therefore, only new data is returned on each API request.
 
@@ -134,7 +134,7 @@ class DataMailboxHandler:
 
         print('sync data...')
         json_data: dict = None
-        more_data_available:bool = True
+        more_data_available: bool = True
         tags_list = []
         while more_data_available:
             data = self.sync_data(ewon_id, lastTransactionId)
@@ -146,10 +146,11 @@ class DataMailboxHandler:
                     tags_list.extend(tags)
             more_data_available = data['moreDataAvailable'] if 'moreDataAvailable' in data else False
             lastTransactionId = int(data['transactionId'])
-        
-        json_data['ewons'][0]['tags'].extend(tags_list)
-        json_data['transactionId'] = lastTransactionId
-        json_data['moreDataAvailable'] = more_data_available
+
+        if len(data['ewons']) > 0 & len(tags_list) > 0:
+            json_data['ewons'][0]['tags'].extend(tags_list)
+            json_data['transactionId'] = lastTransactionId
+            json_data['moreDataAvailable'] = more_data_available
 
         return json_data
 
