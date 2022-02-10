@@ -9,7 +9,8 @@ DEPLOY_TENANT=t769416337
 DEPLOY_USER=muhammadali.riaz@softwareag.com
 DEPLOY_PASSWORD=Click@49617934961793
 APPLICATION_NAME=ewon-flexy-integration
-APPLICATION_ID=72377
+APPLICATION_ID=
+#72377
 
 PACK=1
 DEPLOY=1
@@ -271,8 +272,7 @@ readResponse() {
 }
 
 readResponse2() {
-	#echo "$1"
-    HTTP_CODE=$(echo $2 | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+    HTTP_CODE=$(echo $resp | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
 	echo "$HTTP_CODE"
 }
 
@@ -283,7 +283,7 @@ getApplicationId () {
 
 	HTTP_CODE=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
 	HTTP_BODY=$(echo "$response" | sed -e 's/HTTPSTATUS:.*//g')
-	APPLICATION_ID=$(echo "$HTTP_BODY" | jq .applications[0].id)
+	APPLICATION_ID=$(echo "$HTTP_BODY" | jq -r .applications[0].id)
 	echo "==================================================="
 	echo "$HTTP_CODE"
 	echo ""
@@ -320,8 +320,12 @@ exitOnErrorInBackendResponse() {
 uploadFile () {
 	echo "=============== uploadFile EXECUTING ================="
 	echo "[INFO] Upload file $WORK_DIR/$ZIP_NAME"
-	resp=$(curl -w "HTTPSTATUS:%{http_code}" -F "data=@$WORK_DIR/$ZIP_NAME" -H "Authorization: $authorization"  "$DEPLOY_ADDRESS/application/applications/$APPLICATION_ID/binaries")
-	readResponse2
+	echo "$DEPLOY_ADDRESS/application/applications/$APPLICATION_ID/binaries"
+	response=$(curl -w "HTTPSTATUS:%{http_code}" -F "data=@$WORK_DIR/$ZIP_NAME" -H "Authorization: $authorization"  "$DEPLOY_ADDRESS/application/applications/$APPLICATION_ID/binaries")
+	echo "$response"
+	HTTP_CODE=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+	echo "$HTTP_CODE"
+	#readResponse2
 	echo "[INFO] File uploaded"
 }
 
