@@ -1,5 +1,7 @@
 #!/bin/bash
 
+### sh deployment.sh deploy --deploy https://devicecert-testtenant.eu-latest.cumulocity.com --tenant t769416337 --user muhammadali.riaz@softwareag.com --password Click@49617934961793 --application ewon-flexy-integration
+
 WORK_DIR=$(pwd)
 APPLICATION_NAME=
 TAG_NAME="latest"
@@ -8,6 +10,7 @@ DEPLOY_TENANT=
 DEPLOY_USER=
 DEPLOY_PASSWORD=
 APPLICATION_ID=
+RELEASE_URL=
 IS_SUBSCRIBED=0
 
 PACK=1
@@ -16,6 +19,7 @@ SUBSCRIBE=1
 HELP=1
 
 execute () {
+	installJqCommand
 	set -e
 	readInput $@
 	cd $WORK_DIR
@@ -105,6 +109,11 @@ readInput () {
 		shift
 		shift
 		;;
+		-rel | --releaseUrl)
+		RELEASE_URL=$2
+		shift
+		shift
+		;;
 		*)
 		shift
 		;;
@@ -147,14 +156,55 @@ printHelp () {
 }
 
 deploy (){
+	downloadReleaseFromGit
 	FILE=$WORK_DIR/$ZIP_NAME
 	if test -f "$FILE"
 	then
 		verifyDeployPrerequisits
 		checkApplicationAndPushToTenant
 		subscribe
+		deleteReleaseFile
 	else
 		echo "[ERROR] Unable to find file $WORK_DIR/$ZIP_NAME"
+	fi
+}
+
+downloadReleaseFromGit () {
+		echo
+		echo "[INFO] Downloading release file"
+		echo
+		response=$(curl -LO -s -w "HTTPSTATUS:%{http_code}" $RELEASE_URL)
+		responseCode=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+		if [ $responseCode -eq 200 ]
+		then
+			echo "[INFO] Build file downloaded successfully"
+		else
+			echo "[ERROR] Build file download failed"
+			exitOnErrorInBackendResponse $response
+		fi
+}
+
+deleteReleaseFile () {
+		echo
+		echo "[INFO] Deleting release file"
+		echo
+		rm -rf ewon-flexy-integration.zip
+}
+
+installJqCommand () {
+	if ! command -v jq &> /dev/null
+	then
+    	echo "[INFO] jq could not be found"
+		echo "[INFO] installing jq command"
+		response=$(curl -s -w "HTTPSTATUS:%{http_code}" -L -o /usr/bin/jq.exe "https://github.com/stedolan/jq/releases/latest/download/jq-win64.exe")
+		responseCode=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+		if [ $responseCode -eq 200 ]
+		then
+			echo "[INFO] jq installed successfully"
+		else
+			echo "[ERROR] Failed to install jq"
+			exitOnErrorInBackendResponse $response
+		fi
 	fi
 }
 
@@ -190,7 +240,7 @@ checkApplicationAndPushToTenant () {
 		getApplicationId
 		if [ "x$APPLICATION_ID" == "xnull" ]
 		then
-			echo "[ERROR] Application with name $APPLICATION_NAME not found, create new application"
+			echo "[ERROR] Application with name $APPLICATION_NAME not found, creating new application"
 			createApplication $authorization
 			getApplicationId
 			if [ "x$APPLICATION_ID" == "xnull" ]
@@ -272,12 +322,12 @@ uploadFile () {
 	echo "$DEPLOY_ADDRESS/application/applications/$APPLICATION_ID/binaries"
 	response=$(curl -w "HTTPSTATUS:%{http_code}" -F "data=@$WORK_DIR/$ZIP_NAME" -H "Authorization: $authorization"  "$DEPLOY_ADDRESS/application/applications/$APPLICATION_ID/binaries")
 	responseCode=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
-	
 	if [ $responseCode -eq 201 ]
 	then
 		echo "[INFO] File uploaded"
 	else
 		echo "[ERROR] File upload failed"
+		echo $response
 		exitOnErrorInBackendResponse $response
 	fi
 }
@@ -314,9 +364,10 @@ exitOnErrorInBackendResponse() {
 	RESPONSE_ERROR=$(echo $1)
 	if [ "x$RESPONSE_ERROR" != "xnull" ] && [ "x$RESPONSE_ERROR" != "x" ]
 	then
-		echo "[ERROR] Error while communicating with platform. Error message: $(echo $resp | jq -r .message)"
+		echo "[ERROR] Error while communicating with platform. Error message: $(echo $1 | jq -r .message)"
 		echo "[ERROR] Full response: $1"
 		echo "[ERROR] HTTP CODE: $HTTP_CODE"
+		deleteReleaseFile
 		exit 1
 	fi
 }
