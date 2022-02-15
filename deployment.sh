@@ -4,18 +4,19 @@
 
 WORK_DIR=$(pwd)
 APPLICATION_NAME=
-TAG_NAME="latest"
+#TAG_NAME="latest"
 DEPLOY_ADDRESS=
 DEPLOY_TENANT=
 DEPLOY_USER=
 DEPLOY_PASSWORD=
 APPLICATION_ID=
 RELEASE_URL=
+IS_FRONTEND=
 IS_SUBSCRIBED=0
 
-PACK=1
-DEPLOY=1
-SUBSCRIBE=1
+DEPLOY_FRONTEND=1
+DEPLOY_MICROSERVICE=1
+
 HELP=1
 
 execute () {
@@ -28,15 +29,24 @@ execute () {
 		printHelp
 		exit
 	fi
-	if [ "$DEPLOY" == "1" ]
+	# if [ "$DEPLOY_MICROSERVICE" == "1" ] && [ "$DEPLOY_FRONTEND" == "1"]
+	# then
+	# 	echo "[INFO] No goal set. deployfe or deployms"
+	# fi
+	if [ "$DEPLOY_MICROSERVICE" == "0" ]
 	then
-		echo "[INFO] No goal set. Please set deploy"
-	fi
-	if [ "$DEPLOY" == "0" ]
-	then
-		echo "[INFO] Start deployment"
+		echo "[INFO] Start microservice deployment"
+		IS_FRONTEND=0
 		deploy
-		echo "[INFO] End deployment"
+		echo "[INFO] End microservice deployment"
+		echo
+	fi
+	if [ "$DEPLOY_FRONTEND" == "0" ]
+	then
+		echo "[INFO] Start frontend deployment"
+		IS_FRONTEND=1
+		deploy
+		echo "[INFO] End front deployment"
 		echo
 	fi
 	exit 0
@@ -48,12 +58,12 @@ readInput () {
 	do
 	key="$1"
 	case $key in
-		pack)
-		PACK=0
+		deployfe)
+		DEPLOY_FRONTEND=0
 		shift
 		;;	
-		deploy)
-		DEPLOY=0
+		deployms)
+		DEPLOY_MICROSERVICE=0
 		shift
 		;;
 		subscribe)
@@ -79,7 +89,7 @@ readInput () {
 		shift
 		shift
 		;;
-		-d | --deploy)
+		url | --baseurl)
 		DEPLOY_ADDRESS=$2
 		shift
 		shift
@@ -298,12 +308,23 @@ createApplication () {
 	echo
 	echo "[INFO] Creating Application"
 	echo
-	body="{
+
+	if [ "$IS_FRONTEND" == "1" ]
+	then
+		body="{
 			\"name\": \"$APPLICATION_NAME\",
-			\"type\": \"MICROSERVICE\",
-			\"key\": \"$APPLICATION_NAME-microservice-key\"
-		}
-	"
+			\"type\": \"HOSTED\",
+			\"key\": \"$APPLICATION_NAME-application-key\",
+			\"contextPath\": \"$APPLICATION_NAME\",
+			\"resourcesUrl\": \"/\"
+		}"
+	else
+		body="{
+				\"name\": \"$APPLICATION_NAME\",
+				\"type\": \"MICROSERVICE\",
+				\"key\": \"$APPLICATION_NAME-microservice-key\"
+			}"
+	fi
 	response=$(curl -w "HTTPSTATUS:%{http_code}" -X POST -s -S -d "$body" -H "Authorization: $authorization"  -H "Content-type: application/json" "$DEPLOY_ADDRESS/application/applications")
 	responseCode=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
 	if [ $responseCode -eq 201 ]
