@@ -14,7 +14,7 @@ Download the latest release for both frontend & backend components from github l
   - `https://github.com/SoftwareAG/cumulocity-flexy-integration/releases`
   - Navigate to latest release version and download `ewon-flexy-integration.zip`
 
-![An example of release file in Github](docs/images/download-release-image.JPG)
+![An example of release file in Github](images/download-release-image.JPG)
 
 ### Deploy on Cumulocity Tenant
 
