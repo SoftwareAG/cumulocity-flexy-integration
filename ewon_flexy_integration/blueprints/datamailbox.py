@@ -133,24 +133,36 @@ class DataMailboxHandler:
                 """
 
         print('sync data...')
-        json_data: dict = None
+        json_data = None
         more_data_available: bool = True
         tags_list = []
+
         while more_data_available:
             data = self.sync_data(ewon_id, lastTransactionId)
             if json_data is None:
                 json_data = data
+                tags_list.extend(data['ewons'][0]['tags'])
             else:
-                if len(data['ewons']) > 0 & len(data['ewons'][0]['tags']):
+                if len(data['ewons']) > 0 and len(data['ewons'][0]['tags']) > 0:
                     tags = data['ewons'][0]['tags']
                     tags_list.extend(tags)
             more_data_available = data['moreDataAvailable'] if 'moreDataAvailable' in data else False
             lastTransactionId = int(data['transactionId'])
 
-        if len(data['ewons']) > 0 & len(tags_list) > 0:
-            json_data['ewons'][0]['tags'].extend(tags_list)
+        tags_unified = dict()
+        for tag in tags_list:
+            if (tag['name'] in tags_unified):
+                tag_history = tags_unified[tag['name']]
+                tag_history['history'].extend(tag['history'])
+                tags_unified[tag['name']] = tag_history
+            else:
+                tags_unified[tag['name']] = tag
+
+        if len(data['ewons']) > 0 and len(tags_list) > 0:
+            json_data['ewons'][0]['tags'] = []
+            for key in tags_unified:
+                json_data['ewons'][0]['tags'].append(tags_unified[key])
             json_data['transactionId'] = lastTransactionId
             json_data['moreDataAvailable'] = more_data_available
 
         return json_data
-
