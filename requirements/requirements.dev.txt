@@ -1,0 +1,10 @@
+# App dependencies
+-r requirements.txt
+
+# Dev dependencies
+setuptools==57.4.0
+invoke==1.6.0
+python-dotenv==0.19.0
+pytest==6.2.4
+importlib_metadata==4.6.4
+typing_extensions==3.10.0

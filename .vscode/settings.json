@@ -1,0 +1,19 @@
+{
+    "cSpell.words": [
+        "dotenv",
+        "getenv",
+        "gunicorn",
+        "importlib",
+        "jsonify",
+        "loglevel",
+        "microservice",
+        "msapi",
+        "pyfile",
+        "pylint",
+        "pytest",
+        "semver",
+        "setuptools",
+        "versioneer",
+        "werkzeug"
+    ]
+}
