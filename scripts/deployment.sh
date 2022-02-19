@@ -1,27 +1,32 @@
 #!/bin/bash
 
-### sh deployment.sh deploy --deploy https://devicecert-testtenant.eu-latest.cumulocity.com --tenant t769416337 --user muhammadali.riaz@softwareag.com --password Click@49617934961793 --application ewon-flexy-integration
-
-WORK_DIR=$(pwd)
-APPLICATION_NAME=
-#TAG_NAME="latest"
+# User inputs
 DEPLOY_ADDRESS=
 DEPLOY_TENANT=
 DEPLOY_USER=
 DEPLOY_PASSWORD=
+
+# Global Variables
+WORK_DIR=$(pwd)
+APPLICATION_NAME=
 APPLICATION_ID=
-RELEASE_URL=
 IS_FRONTEND=
 IS_SUBSCRIBED=0
+RELEASE_URL=""
+MICROSERVICE_NAME="ewon-flexy-integration"
+FRONTEND_APP_NAME="ewon-flexy-integration-app"
+MICROSERVICE_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration/releases/latest"
+FRONTEND_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration-ui/releases/latest"
 
 DEPLOY_FRONTEND=1
 DEPLOY_MICROSERVICE=1
-
 HELP=1
 
+#TAG_NAME="latest"
+
 execute () {
-	installJqCommand
 	set -e
+	installJqCommand
 	readInput $@
 	cd $WORK_DIR
 	if [ "$HELP" == "0" ]
@@ -29,14 +34,13 @@ execute () {
 		printHelp
 		exit
 	fi
-	# if [ "$DEPLOY_MICROSERVICE" == "1" ] && [ "$DEPLOY_FRONTEND" == "1"]
-	# then
-	# 	echo "[INFO] No goal set. deployfe or deployms"
-	# fi
+
 	if [ "$DEPLOY_MICROSERVICE" == "0" ]
 	then
 		echo "[INFO] Start microservice deployment"
 		IS_FRONTEND=0
+		APPLICATION_NAME="$MICROSERVICE_NAME"
+		setDefaults
 		deploy
 		echo "[INFO] End microservice deployment"
 		echo
@@ -45,6 +49,8 @@ execute () {
 	then
 		echo "[INFO] Start frontend deployment"
 		IS_FRONTEND=1
+		APPLICATION_NAME="$FRONTEND_APP_NAME"
+		setDefaults
 		deploy
 		echo "[INFO] End front deployment"
 		echo
@@ -129,7 +135,6 @@ readInput () {
 		;;
 	esac
 	done
-	setDefaults
 }
 
 setDefaults () {
@@ -140,6 +145,14 @@ setDefaults () {
 	then 
 		APPLICATION_NAME=$IMAGE_NAME
 	fi	
+}
+
+setReleaseUrl () {
+	if [ "$IS_FRONTEND" == "0" ]
+	then 
+		RELEASE_URL=$(curl -s $MICROSERVICE_LATEST_RELEASE_URL | grep "browser_download_url.*zip" | cut -d : -f 2,3 | tr -d \")
+	else RELEASE_URL=$(curl -s $FRONTEND_LATEST_RELEASE_URL | grep "browser_download_url.*zip" | cut -d : -f 2,3 | tr -d \")
+	fi
 }
 
 printHelp () {
@@ -165,12 +178,13 @@ printHelp () {
 	echo "	-id  | --applicationId	# Application used for subscription purposes. Required only for solemn subscribe execution"
 }
 
-deploy (){
+deploy () {
+	setReleaseUrl
+	verifyDeployPrerequisits
 	downloadReleaseFromGit
 	FILE=$WORK_DIR/$ZIP_NAME
 	if test -f "$FILE"
 	then
-		verifyDeployPrerequisits
 		checkApplicationAndPushToTenant
 		subscribe
 		deleteReleaseFile
@@ -221,10 +235,11 @@ installJqCommand () {
 verifyDeployPrerequisits () {
 	result=0
 	verifyParamSet "$IMAGE_NAME" "name"
-	verifyParamSet "$DEPLOY_ADDRESS" "address"
+	verifyParamSet "$DEPLOY_ADDRESS" "baseUrl"
 	verifyParamSet "$DEPLOY_TENANT" "tenant"
 	verifyParamSet "$DEPLOY_USER" "user"
 	verifyParamSet "$DEPLOY_PASSWORD" "password"
+	verifyParamSet "$RELEASE_URL" "releaseUrl"
 
 	if [ "$result" == "1" ]
 	then
@@ -346,10 +361,29 @@ uploadFile () {
 	if [ $responseCode -eq 201 ]
 	then
 		echo "[INFO] File uploaded"
+		if [ "$IS_FRONTEND" == "1" ]
+		then
+			activateFrontendApp
+		fi
 	else
 		echo "[ERROR] File upload failed"
 		echo $response
 		exitOnErrorInBackendResponse $response
+	fi
+}
+
+activateFrontendApp () {
+	response=$(curl -w "HTTPSTATUS:%{http_code}" -H "Authorization: $authorization"  "$DEPLOY_ADDRESS/application/applications/$APPLICATION_ID/binaries?pageSize=100")
+	responseCode=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+	responseBody=$(echo "$response" | sed -e 's/HTTPSTATUS:.*//g')
+	if [ $responseCode -eq 200 ]
+	then
+		activateBinaryId=$(echo "$responseBody" | jq -r .attachments[5].id)
+		body="{
+				\"id\": \"$APPLICATION_ID\",
+				\"activeVersionId\": \"$activateBinaryId\"
+			}"
+		response=$(curl -w "HTTPSTATUS:%{http_code}" -X PUT -s -S -d "$body" -H "Authorization: $authorization"  -H "Content-type: application/json" "$DEPLOY_ADDRESS/application/applications/$APPLICATION_ID")
 	fi
 }
 
