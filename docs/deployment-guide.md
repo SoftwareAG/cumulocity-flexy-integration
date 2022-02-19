@@ -54,6 +54,33 @@ __Note:__ That the application takes a few minutes to startup.
 
 __Note:__ That the application takes a few minutes to startup.
 
-## Automated Deployment (via Shell Script)
-### Setup pre-requisites for shell script
+## Automated Deployment (via Bash Script)
+### Setup pre-requisites for bash script
+The script 'Deployment.sh' was created in order to automate the entire deployment process for Ewon Flexy Integration Project. This section is comprised of instructions to successfully execute this script.
+
+
+__Note__: This step can be ignored if Bash is already installed on your system.
+
+Bash is a Unix shell and a command language. The Bash Script used for deploying the application is a collection of commands that automates the entire process of deployment with a small input from the user, like user name, password and Cumulocity tenant information. 
+
+This instruction manual discusses installation of GitBash, but you are free to use any other Unix Shell.
+
+#### Steps to download and install GitBash:
+- Download Git from following url. Select either 32bit version or 64bit version depending on your system.
+  - https://git-scm.com/download/win 
+  - ![](images/git-download.JPG)
+- Run the downloaded exe file, press `Next` with default configuration until the end. Press `Install` will install the GitBash on your system.
+  - ![](images/git-installer.jpg)
+- To verify if GitBash has been installed on your system. Once the setup is finished, open `Start` menu and type Git Bash. You will see that GitBash has been installed correctly.
+  - ![](images/git-installed.jpg)
+
 ### Running Script
+Follow the following steps to run deployment script:
+- Download the `deployment.sh` script
+- Create a folder named `deploy` in `C drive` named 
+- Open GitBash and navigate to directory where the script file is located
+  - In GitBash, write `cd C:\deploy`, you will see the following change on GitBash terminal
+  - ![](images/gitbash-navigate.JPG)
+- For Microservice deployment, use the following command:
+  -  `sh deployment.sh deployms --baseurl <url-of-tenant> --tenant __<tenant-id-of-tenant>__ --user __<cumulocity-user>__ --password __<cumulocity-password>__ --application ewon-flexy-integration --releaseUrl https://github.com/SoftwareAG/cumulocity-flexy-integration/releases/download/v1.0.0/ewon-flexy-integration.zip`
+ 
