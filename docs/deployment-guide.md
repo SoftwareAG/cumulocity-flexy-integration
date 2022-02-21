@@ -44,7 +44,7 @@ __Note:__ That the application takes a few minutes to startup.
 
 #### Backend Deployment
 
-- When the `Add application` pop-up opens, click on `Upload microservice`
+- When the `Add application` pop-up opens, click on `Upload microservice` (__NOTE:__ If this option is unavailable, this means, the tenant does not have rights to host the microservice)
   - ![](images/upload-webapplication.JPG)
   - Upload the downloaded release file `ewon-flexy-integration.zip` for frontend application.
   - Once uploaded the Ewon Flexy Integration microservice will start appearing on Own applications page.
@@ -57,7 +57,6 @@ __Note:__ That the application takes a few minutes to startup.
 ## Automated Deployment (via Bash Script)
 ### Setup pre-requisites for bash script
 The script 'Deployment.sh' was created in order to automate the entire deployment process for Ewon Flexy Integration Project. This section is comprised of instructions to successfully execute this script.
-
 
 __Note__: This step can be ignored if Bash is already installed on your system.
 
@@ -78,9 +77,11 @@ This instruction manual discusses installation of GitBash, but you are free to u
 Follow the following steps to run deployment script:
 - Download the `deployment.sh` script
 - Create a folder named `deploy` in `C drive` named 
-- Open GitBash and navigate to directory where the script file is located
+- Open GitBash __(Run As Administrator)__ and navigate to directory where the script file is located
   - In GitBash, write `cd C:\deploy`, you will see the following change on GitBash terminal
   - ![](images/gitbash-navigate.JPG)
 - For Microservice deployment, use the following command:
-  -  `sh deployment.sh deployms --baseurl <url-of-tenant> --tenant __<tenant-id-of-tenant>__ --user __<cumulocity-user>__ --password __<cumulocity-password>__ --application ewon-flexy-integration --releaseUrl https://github.com/SoftwareAG/cumulocity-flexy-integration/releases/download/v1.0.0/ewon-flexy-integration.zip`
- 
+  -  `sh deployment.sh deployms --baseurl <url-of-tenant> --tenant __<tenant-id-of-tenant>__ --user __<cumulocity-user>__ --password __<cumulocity-password>__`
+-  For Frontend deployment, use the following commange:
+  -  `sh deployment.sh deployfe --baseurl <url-of-tenant> --tenant __<tenant-id-of-tenant>__ --user __<cumulocity-user>__ --password __<cumulocity-password>__`
+-  Finally, you can log in to tenant and navigate to own application section and see the Microservice and the Frontend Application are both deployed.
