@@ -63,8 +63,9 @@ Table: This is an example table.\label{example_table}
 ## Deployment Guide
 The Ewon Flexy Integration Application is comprised of following two components:
 
-### Manual Deployment 
-#### Download latest release from GitHub
+### Manual Deployment for Ewon Flexy Integration Application
+
+
 Download the latest release for both frontend & backend components from github links as mentioned below:
 
 - Ewon Flexy Integration Application `(Frontend component)`
@@ -83,6 +84,7 @@ Download the latest release for both frontend & backend components from github l
   - ![](images/admin-navigate-image.JPG)
 - On the navigation menu, click on `Own application`.
 - For first time deployment, click on `Add application` button.
+
   - ![](images/ownapplication-navigate.JPG)
 
 
@@ -104,7 +106,7 @@ __Note:__ That the application takes a few minutes to startup.
 
 #### Backend Deployment
 
-- When the `Add application` pop-up opens, click on `Upload microservice` (__NOTE:__ If this option is unavailable, this means, the tenant does not have rights to host the microservice)
+- When the `Add application` pop-up opens, click on `Upload microservice` (__NOTE:__ If this option is unavailable, this means, the tenant does not have permissions to host the microservice)
   - ![](images/upload-webapplication.JPG)
   - Upload the downloaded release file `ewon-flexy-integration.zip` for frontend application.
   - Once uploaded the Ewon Flexy Integration microservice will start appearing on Own applications page.
@@ -146,8 +148,3 @@ Follow the following steps to run deployment script:
      - `sh deployment.sh deployfe --baseurl <url-of-tenant> --tenant __<tenant-id-of-tenant>__ --user __<cumulocity-user>__ --password __<cumulocity-password>__`
 -  Finally, you can log in to tenant and navigate to own application section and see the Microservice and the Frontend Application are both deployed.
 
-## References
-
-- [Pandoc](http://pandoc.org/)
-- [Pandoc Manual](http://pandoc.org/MANUAL.html)
-- [Wikipedia: Markdown](http://wikipedia.org/wiki/Markdown)
