@@ -17,12 +17,13 @@ MICROSERVICE_NAME="ewon-flexy-integration"
 FRONTEND_APP_NAME="ewon-flexy-integration-app"
 MICROSERVICE_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration/releases/latest"
 FRONTEND_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration-ui/releases/latest"
+TAG_NAME=""
 
 DEPLOY_FRONTEND=1
 DEPLOY_MICROSERVICE=1
 HELP=1
 
-#TAG_NAME="latest"
+
 
 execute () {
 	set -e
@@ -147,13 +148,6 @@ setDefaults () {
 	fi	
 }
 
-setReleaseUrl () {
-	if [ "$IS_FRONTEND" == "0" ]
-	then 
-		RELEASE_URL=$(curl -s $MICROSERVICE_LATEST_RELEASE_URL | grep "browser_download_url.*zip" | cut -d : -f 2,3 | tr -d \")
-	else RELEASE_URL=$(curl -s $FRONTEND_LATEST_RELEASE_URL | grep "browser_download_url.*zip" | cut -d : -f 2,3 | tr -d \")
-	fi
-}
 
 printHelp () {
 	echo
@@ -193,6 +187,41 @@ deploy () {
 	fi
 }
 
+setReleaseUrl () {
+	if [ "$IS_FRONTEND" == "0" ]
+	then
+		response=$(curl -s $MICROSERVICE_LATEST_RELEASE_URL) 
+	else response=$(curl -s $FRONTEND_LATEST_RELEASE_URL)
+	fi
+
+	RELEASE_URL=$(echo $response | jq -r .assets[0].browser_download_url)
+	TAG_NAME=$(echo "$response" | jq -r .tag_name)
+}
+
+verifyDeployPrerequisits () {
+	result=0
+	verifyParamSet "$IMAGE_NAME" "name"
+	verifyParamSet "$DEPLOY_ADDRESS" "baseUrl"
+	verifyParamSet "$DEPLOY_TENANT" "tenant"
+	verifyParamSet "$DEPLOY_USER" "user"
+	verifyParamSet "$DEPLOY_PASSWORD" "password"
+	verifyParamSet "$RELEASE_URL" "releaseUrl"
+
+	if [ "$result" == "1" ]
+	then
+		echo "[WARNING] Deployment skipped"
+		exit 1
+	fi
+}
+
+verifyParamSet (){
+	if [ "x$1" == "x" ]
+	then
+		echo "[WARNING] Missing parameter: $2"
+		result=1
+	fi
+}
+
 downloadReleaseFromGit () {
 		echo
 		echo "[INFO] Downloading release file"
@@ -229,30 +258,6 @@ installJqCommand () {
 			echo "[ERROR] Failed to install jq"
 			exitOnErrorInBackendResponse $response
 		fi
-	fi
-}
-
-verifyDeployPrerequisits () {
-	result=0
-	verifyParamSet "$IMAGE_NAME" "name"
-	verifyParamSet "$DEPLOY_ADDRESS" "baseUrl"
-	verifyParamSet "$DEPLOY_TENANT" "tenant"
-	verifyParamSet "$DEPLOY_USER" "user"
-	verifyParamSet "$DEPLOY_PASSWORD" "password"
-	verifyParamSet "$RELEASE_URL" "releaseUrl"
-
-	if [ "$result" == "1" ]
-	then
-		echo "[WARNING] Deployment skipped"
-		exit 1
-	fi
-}
-
-verifyParamSet (){
-	if [ "x$1" == "x" ]
-	then
-		echo "[WARNING] Missing parameter: $2"
-		result=1
 	fi
 }
 
