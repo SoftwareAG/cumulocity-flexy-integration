@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "cumulocity_flexy_integration/main.py",
+                "FLASK_APP": "ewon_flexy_integration/main.py",
                 "FLASK_ENV": "development",
                 "PROMETHEUS_MULTIPROC_DIR": "/tmp",
             },

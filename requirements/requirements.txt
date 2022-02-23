@@ -1,4 +1,5 @@
 Flask==2.0.1
 gunicorn==20.1.0
 prometheus-flask-exporter==0.18.2
-c8y_api @ https://github.com/SoftwareAG/cumulocity-python-api/releases/download/release_1_0_2/c8y_api-1.0.2-py3-none-any.whl
+c8y_api @ https://github.com/SoftwareAG/cumulocity-python-api/releases/download/1.0.1/c8y_api-1.0.1-py3-none-any.whl
+schedule==1.1.0

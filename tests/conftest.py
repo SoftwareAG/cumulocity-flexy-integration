@@ -8,7 +8,7 @@ from tests.fixtures.environment import EnvironmentFixture
 from c8y_api.app import CumulocityApi
 from c8y_api.model.inventory import Fragment, ManagedObject
 import pytest
-from cumulocity_flexy_integration.main import create_app
+from ewon_flexy_integration.main import create_app
 
 
 @pytest.fixture(scope='module')

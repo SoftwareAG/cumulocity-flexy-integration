@@ -1,7 +1,7 @@
 """Metric handler"""
 import json
 from flask import Blueprint
-from cumulocity_flexy_integration._version import get_versions
+from ewon_flexy_integration._version import get_versions
 
 bp = Blueprint('version', __name__)
 

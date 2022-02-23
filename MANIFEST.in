@@ -1,2 +1,2 @@
 include versioneer.py
-include ./cumulocity_flexy_integration/_version.py
+include ./ewon_flexy_integration/_version.py
