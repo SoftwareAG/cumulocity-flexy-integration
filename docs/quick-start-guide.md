@@ -143,8 +143,8 @@ Follow the following steps to run deployment script:
   - In GitBash, write `cd C:\deploy`, you will see the following change on GitBash terminal
   - ![](images/gitbash-navigate.JPG)
 - For Microservice deployment, use the following command:
-  -  `sh deployment.sh deployms --baseurl <url-of-tenant> --tenant __<tenant-id-of-tenant>__ --user __<cumulocity-user>__ --password __<cumulocity-password>__`
+  -  `sh deployment.sh deployms --baseurl <url-of-tenant> --tenant <tenant-id-of-tenant> --user <cumulocity-user> --password <cumulocity-password>`
 -  For Frontend deployment, use the following commange:
-     - `sh deployment.sh deployfe --baseurl <url-of-tenant> --tenant __<tenant-id-of-tenant>__ --user __<cumulocity-user>__ --password __<cumulocity-password>__`
+     - `sh deployment.sh deployfe --baseurl <url-of-tenant> --tenant <tenant-id-of-tenant> --user <cumulocity-user> --password <cumulocity-password>`
 -  Finally, you can log in to tenant and navigate to own application section and see the Microservice and the Frontend Application are both deployed.
 
