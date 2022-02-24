@@ -116,7 +116,7 @@ class DataSynchronizationHandler:
             except HTTPException as exception:
                 return jsonify(exception)
 
-            if (len(dm_history["ewons"]) > 0):
+            if (dm_history is not None and len(dm_history["ewons"]) > 0):
                 # Go through list of history and sync with c8y
                 for ewon in dm_history["ewons"]:
                     logger.info(
