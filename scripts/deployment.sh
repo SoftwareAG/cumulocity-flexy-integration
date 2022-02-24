@@ -14,7 +14,9 @@ IS_FRONTEND=
 IS_SUBSCRIBED=0
 RELEASE_URL=""
 MICROSERVICE_NAME="ewon-flexy-integration"
-FRONTEND_APP_NAME="ewon-flexy-integration-app"
+FRONTEND_APP_NAME="Ewon Flexy Integration app"
+UPLOAD_FILE_NAME=
+APPLICATION_GET_NAME=
 MICROSERVICE_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration/releases/latest"
 FRONTEND_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration-ui/releases/latest"
 TAG_NAME=""
@@ -41,6 +43,8 @@ execute () {
 		echo "[INFO] Start microservice deployment"
 		IS_FRONTEND=0
 		APPLICATION_NAME="$MICROSERVICE_NAME"
+		UPLOAD_FILE_NAME="$MICROSERVICE_NAME"
+		APPLICATION_GET_NAME="$MICROSERVICE_NAME"
 		setDefaults
 		deploy
 		echo "[INFO] End microservice deployment"
@@ -50,7 +54,12 @@ execute () {
 	then
 		echo "[INFO] Start frontend deployment"
 		IS_FRONTEND=1
+		appNameInLowerCase=$(echo $FRONTEND_APP_NAME | tr '[:upper:]' '[:lower:]')
 		APPLICATION_NAME="$FRONTEND_APP_NAME"
+		# Convert to lowercase and replaces spaces with '-''
+		UPLOAD_FILE_NAME=$(echo "${appNameInLowerCase// /-}")
+		# Convert spaces to '%20' to use in get request
+		APPLICATION_GET_NAME=$(echo "${FRONTEND_APP_NAME// /%20}")
 		setDefaults
 		deploy
 		echo "[INFO] End front deployment"
@@ -140,12 +149,9 @@ readInput () {
 
 setDefaults () {
 	IS_SUBSCRIBED=0
-	IMAGE_NAME="$APPLICATION_NAME"
+	##"$APPLICATION_NAME"
+	IMAGE_NAME="$UPLOAD_FILE_NAME"
 	ZIP_NAME="$IMAGE_NAME.zip"
-	if [ "x$APPLICATION_NAME" == "x" ]
-	then 
-		APPLICATION_NAME=$IMAGE_NAME
-	fi	
 }
 
 
@@ -310,7 +316,7 @@ getApplicationId () {
 	echo
 	echo "[INFO] Fetching Application Id"
 	echo
-	URL="$DEPLOY_ADDRESS/application/applicationsByName/$APPLICATION_NAME"
+	URL="$DEPLOY_ADDRESS/application/applicationsByName/$APPLICATION_GET_NAME"
 	response=$(curl -s -w "HTTPSTATUS:%{http_code}" $URL -H "Authorization: $authorization")
 
 	responseCode=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
@@ -334,8 +340,8 @@ createApplication () {
 		body="{
 			\"name\": \"$APPLICATION_NAME\",
 			\"type\": \"HOSTED\",
-			\"key\": \"$APPLICATION_NAME-application-key\",
-			\"contextPath\": \"$APPLICATION_NAME\",
+			\"key\": \"$UPLOAD_FILE_NAME-key\",
+			\"contextPath\": \"$UPLOAD_FILE_NAME\",
 			\"resourcesUrl\": \"/\"
 		}"
 	else
@@ -383,7 +389,8 @@ activateFrontendApp () {
 	responseBody=$(echo "$response" | sed -e 's/HTTPSTATUS:.*//g')
 	if [ $responseCode -eq 200 ]
 	then
-		activateBinaryId=$(echo "$responseBody" | jq -r .attachments[5].id)
+		length=$(echo "$responseBody" | jq '.attachments | length')
+		activateBinaryId=$(echo "$responseBody" | jq -r .attachments[-1].id)
 		body="{
 				\"id\": \"$APPLICATION_ID\",
 				\"activeVersionId\": \"$activateBinaryId\"
