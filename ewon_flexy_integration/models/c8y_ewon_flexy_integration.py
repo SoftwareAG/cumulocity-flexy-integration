@@ -1,5 +1,3 @@
-
-
 from c8y_api.app import CumulocityApp
 from c8y_api.model.managedobjects import Device, ManagedObject
 from c8y_api.model.measurements import Measurement

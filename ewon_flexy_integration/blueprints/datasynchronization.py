@@ -2,6 +2,7 @@
 import os
 import logging
 import base64
+import threading
 from ewon_flexy_integration.utils.rest import TenantApi
 import requests
 from http.client import CONFLICT, NOT_FOUND, HTTPException
@@ -10,7 +11,8 @@ from ewon_flexy_integration.models.c8y_ewon_flexy_integration import C8YEwonFlex
 from c8y_api.model import ManagedObject
 
 from flask import Blueprint, jsonify, request
-from c8y_api.app import CumulocityApp, CumulocityApi
+from c8y_api.app import CumulocityApp
+
 
 bp = Blueprint('datasynchronization', __name__)
 logger = logging.getLogger('data synchronization')
@@ -27,19 +29,23 @@ def execute_all_jobs():
     logger.info(result_message)
     return result_message
 
-
-@bp.route('/executejob')
+@bp.route("/executejob")
 def execute_job():
     """Manually execute synchronization for specific job via this endpoint.
     """
     token = request.headers.get('t2mtoken')
     job_id = request.headers.get('jobId')
     tenant_id = request.headers.get('tenantId')
+    
+    #background_tasks.add_task(job, token, job_id, tenant_id)
     dsh = DataSynchronizationHandler()
-    return dsh.syncdata(token, job_id, tenant_id)
-
+       
+    
+    return dsh.syncdata(token, job_id, tenant_id) 
 
 class DataSynchronizationHandler:
+    """_summary_
+    """
 
     def __init__(self):
         self.c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
@@ -56,7 +62,7 @@ class DataSynchronizationHandler:
                 subtenant_response = subtenant_instance.get(
                     "/inventory/managedObjects?pageSize=100&fragmentType=c8y_HMSOnloadingJob&currentPage=1&withTotalPages=true")
                 subtenant_jobs_mo_list = subtenant_response["managedObjects"]
-                jobs_executed = []
+                jobs_executed = 0
                 for job_mo in subtenant_jobs_mo_list:
                     if (job_mo["isActive"]):
                         owner = job_mo["owner"]
@@ -69,9 +75,18 @@ class DataSynchronizationHandler:
                                 f'Datamailbox token is missing in tenant options for user {owner} & job{job_id}')
                         else:
                             self.syncdata(token, job_id, subscribed_tenant_id)
+                            jobs_executed += jobs_executed
         return len(jobs_executed)
 
     def create_tenant_option_category(self, string_to_encode: str):
+        """_summary_
+
+        Args:
+            string_to_encode (str): _description_
+
+        Returns:
+            _type_: _description_
+        """
         conversion_bytes = string_to_encode.encode('ascii')
         base64_bytes = base64.b64encode(conversion_bytes)
         converted = base64_bytes.decode('ascii')
@@ -80,6 +95,15 @@ class DataSynchronizationHandler:
         return tenant_option_category
 
     def get_token_value_from_tenant_options(self, category, subtenant_instance):
+        """_summary_
+
+        Args:
+            category (_type_): _description_
+            subtenant_instance (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         #c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
         tenant_api = TenantApi(subtenant_instance)
         token = tenant_api.get_tenant_option(category, "token")
@@ -125,6 +149,7 @@ class DataSynchronizationHandler:
                     tags: list = ewon["tags"]
                     for t in tags:
                         try:
+                            logger.info(f"Posting measurements for Tag [{t.get('name')}], Datatype [{t.get('dataType')}], Count [{len(t.get('history'))}]")
                             if t.get("dataType"):
                                 # Send numbers as measurements
                                 if t.get("dataType") == 'Int':
@@ -161,6 +186,11 @@ class DataSynchronizationHandler:
                     to_update["lastTransactionId"] = last_transaction_id
                     tenant_instance.put(
                         f'/inventory/managedObjects/{ewon_mo.id}', to_update)
+                    logger.info(f"Successful Synchronization of data for device: {ewon_mo.name} [{ewon_mo.id}] till transaction [{last_transaction_id}]")
+            else: 
+                logger.info(f"No new data found for device: {ewon_mo.name} [{ewon_mo.id}]")
+                if last_transaction_id is not None:
+                    logger.info(f"History data is synchronized till last transaction [{last_transaction_id}]")
         return '', 200
 
     def get_subscribed_tenants_list(self):
