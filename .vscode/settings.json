@@ -1,18 +1,26 @@
 {
     "cSpell.words": [
         "dotenv",
+        "ewon",
+        "ewons",
+        "executalljobs",
+        "Flexy",
         "getenv",
         "gunicorn",
         "importlib",
         "jsonify",
         "loglevel",
+        "mdevid",
         "microservice",
         "msapi",
+        "mtoken",
+        "Onloading",
         "pyfile",
         "pylint",
         "pytest",
         "semver",
         "setuptools",
+        "syncrhonizing",
         "versioneer",
         "werkzeug"
     ]

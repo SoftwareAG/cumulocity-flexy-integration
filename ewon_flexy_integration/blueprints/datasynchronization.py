@@ -2,17 +2,14 @@
 import os
 import logging
 import base64
-import threading
-from ewon_flexy_integration.utils.rest import TenantApi
 import requests
-from http.client import CONFLICT, NOT_FOUND, HTTPException
+from ewon_flexy_integration.utils.rest import TenantApi
+from http.client import CONFLICT, HTTPException
 from ewon_flexy_integration.blueprints.datamailbox import DataMailboxHandler
 from ewon_flexy_integration.models.c8y_ewon_flexy_integration import C8YEwonFlexyIntegration
 from c8y_api.model import ManagedObject
-
 from flask import Blueprint, jsonify, request
 from c8y_api.app import CumulocityApp
-
 
 bp = Blueprint('datasynchronization', __name__)
 logger = logging.getLogger('data synchronization')
@@ -22,12 +19,12 @@ logger = logging.getLogger('data synchronization')
 def execute_all_jobs():
     """Manually execute synchronization of all jobs via this endpoint.
     """
-
-    dsh = DataSynchronizationHandler()
-    total_jobs_executed = dsh.synchronize_historic_data()
+    dsh_handler = DataSynchronizationHandler()
+    total_jobs_executed = dsh_handler.synchronize_historic_data()
     result_message = "Total jobs executed: " + str(total_jobs_executed)
     logger.info(result_message)
     return result_message
+
 
 @bp.route("/executejob")
 def execute_job():
@@ -36,15 +33,12 @@ def execute_job():
     token = request.headers.get('t2mtoken')
     job_id = request.headers.get('jobId')
     tenant_id = request.headers.get('tenantId')
-    
-    #background_tasks.add_task(job, token, job_id, tenant_id)
-    dsh = DataSynchronizationHandler()
-       
-    
-    return dsh.syncdata(token, job_id, tenant_id) 
+    dsh_handler = DataSynchronizationHandler()
+    return dsh_handler.syncdata(token, job_id, tenant_id)
+
 
 class DataSynchronizationHandler:
-    """_summary_
+    """Contains methods for syncrhonizing history data
     """
 
     def __init__(self):
@@ -71,12 +65,12 @@ class DataSynchronizationHandler:
                             category, subtenant_instance)
                         job_id = job_mo["id"]
                         if token is None:
-                            logger.warn(
-                                f'Datamailbox token is missing in tenant options for user {owner} & job{job_id}')
+                            logger.warning(
+                                'Datamailbox token is missing in tenant options for user %s & job %s', owner, job_id)
                         else:
                             self.syncdata(token, job_id, subscribed_tenant_id)
                             jobs_executed += jobs_executed
-        return len(jobs_executed)
+        return jobs_executed
 
     def create_tenant_option_category(self, string_to_encode: str):
         """_summary_
@@ -112,10 +106,10 @@ class DataSynchronizationHandler:
     def syncdata(self, token, job_id, tenant_id):
         """Get list of data from devices
         """
-        logger.info(f'Executing Job: {job_id}')
+        logger.info('Executing Job: %s', job_id)
         tenant_instance = self.c8y.get_tenant_instance(tenant_id)
 
-        dm = DataMailboxHandler(token)
+        dm_handler = DataMailboxHandler(token)
         c8y_ewon_integration = C8YEwonFlexyIntegration(tenant_instance)
         ewon_ids = c8y_ewon_integration.get_ewons_from_job_id(job_id)
 
@@ -124,18 +118,18 @@ class DataSynchronizationHandler:
             try:
                 ewon_mo: ManagedObject = c8y_ewon_integration.get_ewon_device(
                     str(ewon_id))
-            except (KeyError) as error:
+            except KeyError:
                 continue
 
             last_transaction_id: int
             try:
                 if hasattr(ewon_mo, 'lastTransactionId'):
                     last_transaction_id = int(ewon_mo['lastTransactionId'])
-            except:
+            except KeyError:
                 last_transaction_id = 0
 
             try:
-                dm_history: dict = dm.sync_all_history_data(
+                dm_history: dict = dm_handler.sync_all_history_data(
                     ewon_id, last_transaction_id)
             except HTTPException as exception:
                 return jsonify(exception)
@@ -144,12 +138,13 @@ class DataSynchronizationHandler:
                 # Go through list of history and sync with c8y
                 for ewon in dm_history["ewons"]:
                     logger.info(
-                        f"Synchronizing data for device: {ewon_mo.name} [{ewon_mo.id}]")
+                        "Synchronizing data for device: %s [%s]", ewon_mo.name, ewon_mo.id)
                     # Each tag represents another measurement type
                     tags: list = ewon["tags"]
                     for t in tags:
                         try:
-                            logger.info(f"Posting measurements for Tag [{t.get('name')}], Datatype [{t.get('dataType')}], Count [{len(t.get('history'))}]")
+                            logger.info("Posting measurements for Tag [%s], Datatype [%s], Count [%s]", t.get(
+                                'name'), t.get('dataType'), len(t.get('history')))
                             if t.get("dataType"):
                                 # Send numbers as measurements
                                 if t.get("dataType") == 'Int':
@@ -174,7 +169,7 @@ class DataSynchronizationHandler:
                                     logger.info("sending event to be defined.")
                                 # Unknown data type
                                 else:
-                                    logger.warn(
+                                    logger.warning(
                                         "Unknown data type for tag: %s", t.get("dataType"))
                         except (ValueError, TypeError, SyntaxError, KeyError) as error:
                             logger.error(
@@ -186,11 +181,15 @@ class DataSynchronizationHandler:
                     to_update["lastTransactionId"] = last_transaction_id
                     tenant_instance.put(
                         f'/inventory/managedObjects/{ewon_mo.id}', to_update)
-                    logger.info(f"Successful Synchronization of data for device: {ewon_mo.name} [{ewon_mo.id}] till transaction [{last_transaction_id}]")
-            else: 
-                logger.info(f"No new data found for device: {ewon_mo.name} [{ewon_mo.id}]")
+                    logger.info(
+                        "Successful Synchronization of data for device: %s [%s] till transaction [%s]", ewon_mo.name, ewon_mo.id, last_transaction_id)
+            else:
+                #logger.info(f"No new data found for device: {ewon_mo.name} [{ewon_mo.id}]")
+                logger.info(
+                    "No new data found for device %s [%s]:", ewon_mo.name, ewon_mo.id)
                 if last_transaction_id is not None:
-                    logger.info(f"History data is synchronized till last transaction [{last_transaction_id}]")
+                    logger.info(
+                        "History data is synchronized till last transaction [%s]", last_transaction_id)
         return '', 200
 
     def get_subscribed_tenants_list(self):
