@@ -42,12 +42,14 @@ class DataSynchronizationHandler:
     """
 
     def __init__(self):
+        print(os.getenv('C8Y_BOOTSTRAP_TENANT'))
         self.c8y = CumulocityApp(os.getenv('C8Y_BOOTSTRAP_TENANT'))
 
     def synchronize_historic_data(self):
         """Synchronize history data according to jobs. 
         """
         subscribed_tenants_list = self.get_subscribed_tenants_list()
+        jobs_executed = 0
         if (len(subscribed_tenants_list) > 0):
             for subscribed_tenant in subscribed_tenants_list:
                 subscribed_tenant_id = subscribed_tenant["tenant"]
@@ -56,7 +58,6 @@ class DataSynchronizationHandler:
                 subtenant_response = subtenant_instance.get(
                     "/inventory/managedObjects?pageSize=100&fragmentType=c8y_HMSOnloadingJob&currentPage=1&withTotalPages=true")
                 subtenant_jobs_mo_list = subtenant_response["managedObjects"]
-                jobs_executed = 0
                 for job_mo in subtenant_jobs_mo_list:
                     if (job_mo["isActive"]):
                         owner = job_mo["owner"]
@@ -69,7 +70,7 @@ class DataSynchronizationHandler:
                                 'Datamailbox token is missing in tenant options for user %s & job %s', owner, job_id)
                         else:
                             self.syncdata(token, job_id, subscribed_tenant_id)
-                            jobs_executed += jobs_executed
+                            jobs_executed = jobs_executed + 1
         return jobs_executed
 
     def create_tenant_option_category(self, string_to_encode: str):
@@ -206,8 +207,6 @@ class DataSynchronizationHandler:
 
         response = requests.get(
             base_url + '/application/currentApplication/subscriptions', auth=bootstrap_auth)
-
-        logger.info("get subscriptions: %s", response.json())
 
         if response.json()['users']:
             subscribed_tenants_list = response.json()['users']
