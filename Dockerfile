@@ -16,4 +16,4 @@ ENV PYTHONPATH="/app:.:$PYTHONPATH"
 ENV PROMETHEUS_MULTIPROC_DIR /tmp
 ENV prometheus_multiproc_dir /tmp
 
-CMD gunicorn -c config.py -w 4 -b 0.0.0.0:80 --log-level=warning server:app
+CMD gunicorn -c config.py -w 4 -b 0.0.0.0:80 --workers=4 --threads=2 --timeout=400 --log-level=warning server:app
