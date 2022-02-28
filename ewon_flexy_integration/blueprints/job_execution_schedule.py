@@ -1,4 +1,3 @@
-from pyclbr import Function
 import threading
 import schedule
 import time
@@ -16,8 +15,15 @@ def run_continuously(interval=1):
     cease_continuous_run = threading.Event()
 
     class ScheduleThread(threading.Thread):
+        """Responsible for periodically executing jobs
+
+        Args:
+            threading (_type_): _description_
+        """
         @classmethod
-        def run(self):
+        def run(cls):
+            """Runs the scheduled job execution
+            """
             while not cease_continuous_run.is_set():
                 schedule.run_pending()
                 time.sleep(interval)
@@ -30,10 +36,3 @@ schedule.every().hour.do(execute_all_jobs)
 
 # Start the background thread
 run_continuously()
-
-# Do some other things...
-#time.sleep(10)
-
-# Stop the background thread
-#stop_run_continuously = run_continuously()
-#stop_run_continuously.set()

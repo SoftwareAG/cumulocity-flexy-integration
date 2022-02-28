@@ -14,7 +14,9 @@ IS_FRONTEND=
 IS_SUBSCRIBED=0
 RELEASE_URL=""
 MICROSERVICE_NAME="ewon-flexy-integration"
-FRONTEND_APP_NAME="ewon-flexy-integration-app"
+FRONTEND_APP_NAME="Ewon Flexy Integration"
+APPLICATION_NAME_WITHOUT_SPACE=
+APPLICATION_GET_NAME=
 MICROSERVICE_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration/releases/latest"
 FRONTEND_LATEST_RELEASE_URL="https://api.github.com/repos/SoftwareAG/cumulocity-flexy-integration-ui/releases/latest"
 TAG_NAME=""
@@ -23,12 +25,11 @@ DEPLOY_FRONTEND=1
 DEPLOY_MICROSERVICE=1
 HELP=1
 
-
-
 execute () {
 	set -e
 	installJqCommand
 	readInput $@
+	IS_SUBSCRIBED=0
 	cd $WORK_DIR
 	if [ "$HELP" == "0" ]
 	then
@@ -41,7 +42,10 @@ execute () {
 		echo "[INFO] Start microservice deployment"
 		IS_FRONTEND=0
 		APPLICATION_NAME="$MICROSERVICE_NAME"
-		setDefaults
+		APPLICATION_NAME_WITHOUT_SPACE="$MICROSERVICE_NAME"
+		APPLICATION_GET_NAME="$MICROSERVICE_NAME"
+		IMAGE_NAME="$APPLICATION_NAME_WITHOUT_SPACE"
+		ZIP_NAME="$IMAGE_NAME.zip"
 		deploy
 		echo "[INFO] End microservice deployment"
 		echo
@@ -50,8 +54,14 @@ execute () {
 	then
 		echo "[INFO] Start frontend deployment"
 		IS_FRONTEND=1
+		appNameInLowerCase=$(echo $FRONTEND_APP_NAME | tr '[:upper:]' '[:lower:]')
 		APPLICATION_NAME="$FRONTEND_APP_NAME"
-		setDefaults
+		# Convert to lowercase and replaces spaces with '-''
+		APPLICATION_NAME_WITHOUT_SPACE=$(echo "${appNameInLowerCase// /-}")
+		# Convert spaces to '%20' to use in get request
+		APPLICATION_GET_NAME=$(echo "${FRONTEND_APP_NAME// /%20}")
+		IMAGE_NAME="$APPLICATION_NAME_WITHOUT_SPACE"
+		ZIP_NAME="$IMAGE_NAME.zip"
 		deploy
 		echo "[INFO] End front deployment"
 		echo
@@ -137,17 +147,6 @@ readInput () {
 	esac
 	done
 }
-
-setDefaults () {
-	IS_SUBSCRIBED=0
-	IMAGE_NAME="$APPLICATION_NAME"
-	ZIP_NAME="$IMAGE_NAME.zip"
-	if [ "x$APPLICATION_NAME" == "x" ]
-	then 
-		APPLICATION_NAME=$IMAGE_NAME
-	fi	
-}
-
 
 printHelp () {
 	echo
@@ -241,7 +240,7 @@ deleteReleaseFile () {
 		echo
 		echo "[INFO] Deleting release file"
 		echo
-		rm -rf ewon-flexy-integration.zip
+		rm -rf $ZIP_NAME
 }
 
 installJqCommand () {
@@ -310,7 +309,7 @@ getApplicationId () {
 	echo
 	echo "[INFO] Fetching Application Id"
 	echo
-	URL="$DEPLOY_ADDRESS/application/applicationsByName/$APPLICATION_NAME"
+	URL="$DEPLOY_ADDRESS/application/applicationsByName/$APPLICATION_GET_NAME"
 	response=$(curl -s -w "HTTPSTATUS:%{http_code}" $URL -H "Authorization: $authorization")
 
 	responseCode=$(echo $response | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
@@ -328,14 +327,13 @@ createApplication () {
 	echo
 	echo "[INFO] Creating Application"
 	echo
-
 	if [ "$IS_FRONTEND" == "1" ]
 	then
 		body="{
 			\"name\": \"$APPLICATION_NAME\",
 			\"type\": \"HOSTED\",
-			\"key\": \"$APPLICATION_NAME-application-key\",
-			\"contextPath\": \"$APPLICATION_NAME\",
+			\"key\": \"$APPLICATION_NAME_WITHOUT_SPACE-application-key\",
+			\"contextPath\": \"$APPLICATION_NAME_WITHOUT_SPACE\",
 			\"resourcesUrl\": \"/\"
 		}"
 	else
@@ -383,7 +381,8 @@ activateFrontendApp () {
 	responseBody=$(echo "$response" | sed -e 's/HTTPSTATUS:.*//g')
 	if [ $responseCode -eq 200 ]
 	then
-		activateBinaryId=$(echo "$responseBody" | jq -r .attachments[5].id)
+		length=$(echo "$responseBody" | jq '.attachments | length')
+		activateBinaryId=$(echo "$responseBody" | jq -r .attachments[-1].id)
 		body="{
 				\"id\": \"$APPLICATION_ID\",
 				\"activeVersionId\": \"$activateBinaryId\"
