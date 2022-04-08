@@ -2,6 +2,7 @@
 import os
 import logging
 import base64
+from urllib import response
 import requests
 from ewon_flexy_integration.utils.rest import TenantApi
 from http.client import CONFLICT, HTTPException
@@ -14,6 +15,20 @@ from c8y_api.app import CumulocityApp
 bp = Blueprint('datasynchronization', __name__)
 logger = logging.getLogger('data synchronization')
 
+
+@bp.route('/checkFiles')
+def check_files():
+    """check files endpoint
+    """
+    url = request.headers.get('filesUrl')
+    
+    responseJar = requests.head(url + "/flexy-cumulocity-connector-1.0.3-full.jar")
+    responseJvm = requests.head(url + "/jvmrun1")
+    responseZip = requests.head(url + "/flexy-cumulocity-connector-1.0.3.zip")
+    
+    filesExist = responseZip.status_code != '404' and responseJar.status_code != '404' and responseJvm.status_code != '404'
+
+    return jsonify(filesExist)
 
 @bp.route('/executalljobs')
 def execute_all_jobs():
